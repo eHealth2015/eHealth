@@ -1,5 +1,16 @@
 Router.configure({
-	layoutTemplate: 'layout'
+	layoutTemplate: 'layout',
+	onBeforeAction: function () {
+		if(!Meteor.userId()) {
+			if(this.url != "/login" && this.url != "/register")
+				this.redirect('/login');
+		}
+		this.next();
+	},
+});
+
+Router.route('/', function () {
+	this.redirect('/home');
 });
 
 Router.route('/login', function () {
@@ -12,6 +23,4 @@ Router.route('/register', function () {
 	this.render('register');
 });
 
-Router.route('/home', function () {
-	this.render('home');
-});
+Router.route('/home');

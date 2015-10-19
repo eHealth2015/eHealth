@@ -11,6 +11,7 @@ Template.register.events({
 				password: password1
 			}, function(error) {
 				if (error) {
+					// TODO
 					console.error(error);
 				} else {
 					Router.go('/home');
