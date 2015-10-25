@@ -1,5 +1,6 @@
 Template.register.events({
-	'click .register': function(event) {
+	'submit form': function(event) {
+		event.preventDefault();
 		var email = $('input[type="email"]').first().val();
 		var password1 = $('input[type="password"]').first().val();
 		var password2 = $('input[type="password"]').first().val();
