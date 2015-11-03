@@ -1,0 +1,11 @@
+<template name="groups">
+	<h1>Groups - common part</h1>
+
+	{{#if isUserMedic}}
+	<h1>Groups - Medic part</h1>
+	{{/if}}
+
+	{{#if isUserPatient}}
+	<h1>Groups - Patient part</h1>
+	{{/if}}
+</template>

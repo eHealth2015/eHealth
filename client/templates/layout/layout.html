@@ -1,4 +1,61 @@
 <template name="layout">
-	<div>Template layout</div>
-	{{> yield}}
+	<div class="sidebar">
+		<ul class="menu">
+
+			{{#if isUserMedic}}
+			<li class="{{whoIsActive.home}}">
+				<a href="/home" alt="Home">
+					<i class="fa fa-home"></i>
+				</a>
+			</li>
+
+			<li class="{{whoIsActive.data}}">
+				<a href="/data" alt="Data">
+					<i class="fa fa-area-chart"></i>
+				</a>
+			</li>
+
+			<li class="{{whoIsActive.groups}}">
+				<a href="/groups" alt="Groups and patients">
+					<i class="fa fa-users"></i>
+				</a>
+			</li>
+			{{/if}}
+
+			{{#if isUserPatient}}
+			<li class="{{whoIsActive.home}}">
+				<a href="/home" alt="Home">
+					<i class="fa fa-home"></i>
+				</a>
+			</li>
+
+			<li class="{{whoIsActive.data}}">
+				<a href="/data" alt="Data">
+					<i class="fa fa-area-chart"></i>
+				</a>
+			</li>
+
+			<li class="{{whoIsActive.groups}}">
+				<a href="/groups" alt="Medical follow">
+					<i class="fa fa-user-md"></i>
+				</a>
+			</li>
+			{{/if}}
+
+			<li class="{{whoIsActive.settings}}">
+				<a href="/settings" alt="Settings">
+					<i class="fa fa-cogs"></i>
+				</a>
+			</li>
+
+			<li>
+				<a href="/login" class="logout" alt="Logout">
+					<i class="fa fa-sign-out"></i>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="content">
+		{{> yield }}
+	</div>
 </template>

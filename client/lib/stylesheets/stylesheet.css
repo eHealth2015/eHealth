@@ -1,0 +1,91 @@
+html, body {
+	background: #eee;
+	font-family: 'Open Sans', sans-serif;
+	color: #444;
+}
+
+h3 {
+	color: #04aab6;
+	font-weight: 600;
+}
+
+h5 {
+	color: #999;
+	font-weight: 400;
+}
+
+.content {
+	padding: 1.5em 2em 1em 120px;
+}
+
+.authentication {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translateX(-50%) translateY(-50%);
+	-webkit-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+}
+
+.authentication input, label {
+	text-align: center;
+}
+
+.authentication input[type="submit"] {
+	display: block;
+	margin: 1em auto;
+	width: 50%;
+	max-width: 400px;
+	background: #04aab6 !important;
+	border-color: #04aab6 !important;
+}
+
+.authentication .links a {
+	display: block;
+	text-decoration: none;
+	color: #aaa;
+}
+
+.authentication .links a:hover {
+	display: block;
+	text-decoration: none;
+	color: #777;
+}
+
+.center {
+	text-align: center;
+}
+
+/* Sidebar */
+.sidebar {
+	position: fixed;
+	width: 80px;
+	background: #333;
+	top: 0;
+	bottom: 0;
+}
+
+.sidebar ul {
+	list-style: none;
+}
+
+.sidebar li {
+	font-size: 1.75em;
+	line-height: 3em;
+	text-align: center;
+	margin: 0;
+}
+
+.sidebar li.active, .sidebar li.active:hover {
+	background: #04aab6;
+}
+
+.sidebar li:hover {
+	background: #4d4d4d;
+}
+
+.sidebar li a {
+	color: #eee;
+	text-decoration: none;
+	display: block;
+}

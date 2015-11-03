@@ -1,0 +1,55 @@
+<template name="settings">
+	<h1>Settings</h1>
+
+	{{#if isUserUnset}}
+	<h4>Finish your profile</h4>
+	<form>
+		<div class="row">
+			<div class="six columns">
+				<label for="profileType">Profile type</label>
+				<select class="u-full-width" id="profileType">
+					<option value="Patient">Patient</option>
+					<option value="medic">Medical doctor</option>
+				</select>
+			</div>
+			<div class="six columns">
+				<label for="code">Optionnal code</label>
+				<input class="u-full-width" placeholder="Enter your code if you have one" id="code" type="text">
+			</div>
+		</div>
+		<div class="row">
+			<div class="six columns">
+				<label for="firstName">First name</label>
+				<input class="u-full-width" placeholder="Enter your first name" id="firstName" type="text">
+			</div>
+			<div class="six columns">
+				<label for="firstName">Last name</label>
+				<input class="u-full-width" placeholder="Enter your last name" id="lastName" type="text">
+			</div>
+		</div>
+		<input class="button-primary" value="Submit" type="submit">
+	</form>
+	{{else}}
+	<h4>Your profile</h4>
+	<ul>
+		<li>Account type: {{ profile.type }}</li>
+		<li>First name: {{ profile.firstName }}</li>
+		<li>Last name: {{ profile.lastName }}</li>
+		<li>
+			<span>Email: {{ email.address }}</span>
+			{{#if email.verified }}
+				<span>TAG VERIFIED</span>
+			{{else}}
+			<span>TAG UNVERIFIED</span>
+			<a href="/" id="sendVerifEmail">Re-send an email</a>
+			{{/if}}
+		</li>
+	</ul>
+	
+	quelque part un bouton edit<br>
+
+	quelque part un moyen de changer son password<br>
+
+	quelque part un bouton rouge "Delete account"
+	{{/if}}
+</template>

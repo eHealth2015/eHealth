@@ -1,0 +1,11 @@
+<template name="home">
+	<h1>Home - common part</h1>
+
+	{{#if isUserMedic}}
+	<h1>Home - Medic part</h1>
+	{{/if}}
+
+	{{#if isUserPatient}}
+	<h1>Home - Patient part</h1>
+	{{/if}}
+</template>
