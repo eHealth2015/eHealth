@@ -1,11 +1,104 @@
 <template name="groups">
-	<h1>Groups - common part</h1>
+	{{#if isUserPatient}}
+	<h1>Medical staff</h1>
+	<span>----------------------------------------------------------------</span>
+	<h4>Medical doctor</h4>
+	{{/if}}
 
 	{{#if isUserMedic}}
-	<h1>Groups - Medic part</h1>
+	<h1>Patients and medical groups</h1>
+	<span>---------------------------------------------------------------------------------------------------------------------</span>
+
+	<h4>Create group</h4>
+	(todo: just show when click on a button)
+	<form>
+		<div class="row">
+			<div class="six columns">
+				<label for="exampleEmailInput">Group name</label>
+				<input class="u-full-width" placeholder="Group name" id="groupName" type="text">
+			</div>
+		</div>
+		<input class="button-primary" value="Submit" type="submit">
+	</form>
+
+
+	<h4>Your patients</h4>
 	{{/if}}
 
-	{{#if isUserPatient}}
-	<h1>Groups - Patient part</h1>
+	<table class="u-full-width">
+		<thead>
+			<tr>
+				<th>First Name</th>
+				<th>Last Name</th>
+				{{#if isUserMedic}}
+				<!-- other fields... -->
+				{{/if}}
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each people}}
+			<tr>
+				<td>{{firstName}}</td>
+				<td>{{lastName}}</td>
+				{{#if isUserMedic}}
+				<!-- other fields... -->
+				{{/if}}
+				<td><i class="fa fa-times"></i></td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+
+	{{#if isUserPatient}}	
+	<h4>Medical groups</h4>
 	{{/if}}
+
+	{{#if isUserMedic}}
+	<h4>Your groups</h4>
+	{{/if}}
+	
+	<table class="u-full-width">
+		<thead>
+			<tr>
+				<th>Name</th>
+				{{#if isUserMedic}}
+				<th>Members</th>
+				<th>Patients</th>
+				{{/if}}
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each groups}}
+			<tr>
+				<td>{{name}}</td>
+				{{#if isUserMedic}}
+				<td>{{medics.length}}</td>
+				<td>{{patients.length}}</td>
+				{{/if}}
+				<td>
+					<i class="fa fa-chevron-down"></i>
+					<a href="/"><i class="fa fa-times"></i></a>
+				</td>
+			</tr>
+			<div class="accordeon">
+				(accordeon)
+				(prévoir des trucs d'admin : ajout et suppr de membres, detele only for admin)
+				<button class="button-primary" id="deleteGroup" groupId="{{_id}}">Delete group</button>
+				<ul>
+				{{#each medics}}
+					<li>{{firstName}} {{lastName}}</li>
+				{{/each}}
+				</ul>
+			</div>
+			{{/each}}
+		</tbody>
+	</table>
+	remarques:<br>
+	(accès pour plus d'info sur le patient ? accordéon ?)<br>
+	(todo: remove patient with confirmation)<br>
+	(todo: confimation avant suppr groupe)<br>
+	(todo: harmoniser les tableaux)<br>
+	(todo: espacer la fleche du bas et la croix ?)	
 </template>

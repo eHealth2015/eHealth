@@ -1,4 +1,8 @@
-Router.configure({
+AuthRouter = RouteController.extend({
+	layoutTemplate: 'inputForm',
+});
+
+AppRouter = RouteController.extend({
 	layoutTemplate: 'layout',
 	loadingTemplate: 'loading',
 	waitOn: function() {
@@ -21,31 +25,34 @@ Router.configure({
 		}
 		else
 			this.next();
-	},
+	}
 });
 
 Router.route('/', function () {
 	this.redirect('/home');
 });
 
-Router.route('/login', function () {
-	this.layout('inputForm');
-	this.render('login');
+Router.route('/login', {
+	controller: 'AuthRouter'
 });
 
-Router.route('/register', function () {
-	this.layout('inputForm');
-	this.render('register');
+Router.route('/register', {
+	controller: 'AuthRouter'
 });
 
-Router.route('/passwordRecovery/:token', function () {
-	this.layout('inputForm');
-	this.render('passwordRecovery');
+Router.route('/passwordRecovery/:token', {
+	controller: 'AuthRouter'
 });
 
-Router.route('home');
-Router.route('data');
-Router.route('groups');
-Router.route('settings');
-
-// TODO : NEED TWO ROUTER CONTROLER TO CHANGE DEFAULT CONFIG
+Router.route('home', {
+	controller: 'AppRouter'
+});
+Router.route('data', {
+	controller: 'AppRouter'
+});
+Router.route('groups', {
+	controller: 'AppRouter'
+});
+Router.route('settings', {
+	controller: 'AppRouter'
+});
