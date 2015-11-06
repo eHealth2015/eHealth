@@ -3,23 +3,31 @@ Groups = new Mongo.Collection('groups');
 
 function getGroupsByUserId(userId) {
 	var user = Meteor.users.findOne({_id: userId});
-	if(user.profile.type === "Medic")
-		return Groups.find({
-			medics: {
-				$elemMatch: {
-					_id: userId
+
+	switch (user.profile.type) {
+		case "Medic":
+			return Groups.find({
+				medics: {
+					$elemMatch: {
+						_id: userId
+					}
 				}
-			}
-		});
-		
-	if(user.profile.type === "Patient")
-		return Groups.find({
-			patients: {
-				$elemMatch: {
-					_id: userId
+			});
+			break;
+
+		case "Patient":
+			return Groups.find({
+				patients: {
+					$elemMatch: {
+						_id: userId
+					}
 				}
-			}
-		}, { fields: { patients: 0 }});
+			}, { fields: { patients: 0 }});
+			break;
+
+		default:
+			break;
+	}
 };
 
 Meteor.publish('groups', function() {

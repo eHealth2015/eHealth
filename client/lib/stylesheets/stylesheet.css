@@ -52,8 +52,37 @@ h5 {
 	color: #777;
 }
 
+.right {
+	text-align: right;
+}
+
+.small.button {
+	line-height: 1.8em;
+	height: 2.1em;
+	padding: 0 .5em;
+	font-size: .6em;
+	margin-left: .5em;
+}
+
+.button.green {
+	border-color: #539642;
+	background-color: #539642;
+	color: #fff;
+}
+
+.button.red {
+	border-color: #d04630;
+	background-color: #d04630;
+	color: #fff;
+}
+
 .center {
 	text-align: center;
+}
+
+table thead th {
+	font-weight: 400;
+	font-style: italic;
 }
 
 /* Sidebar */

@@ -30,26 +30,37 @@
 		<input class="button-primary" value="Submit" type="submit">
 	</form>
 	{{else}}
-	<h4>Your profile</h4>
+	<div class="row">
+		<div class="seven columns">
+			<h4>Your profile</h4>
+		</div>
+		<div class="five collumns right">
+			<button>Change password</button>
+			<button>Edit</button>
+		</div>
+	</div>
 	<ul>
 		<li>Account type: {{ profile.type }}</li>
 		<li>First name: {{ profile.firstName }}</li>
 		<li>Last name: {{ profile.lastName }}</li>
 		<li>
 			<span>Email: {{ email.address }}</span>
+
 			{{#if email.verified }}
-				<span>TAG VERIFIED</span>
+				<span class="small button green">
+					<i class="fa fa-check"></i>
+				</span>
 			{{else}}
-			<span>TAG UNVERIFIED</span>
-			<a href="/" id="sendVerifEmail">Re-send an email</a>
+				<span class="small button red">
+					<i class="fa fa-times"></i>
+					Re-send an email
+				</span>
 			{{/if}}
 		</li>
 	</ul>
-	
-	quelque part un bouton edit<br>
 
-	quelque part un moyen de changer son password<br>
-
-	quelque part un bouton rouge "Delete account"
+	<div class="right">
+		<button>Delete my account</button>
+	</div>
 	{{/if}}
 </template>
