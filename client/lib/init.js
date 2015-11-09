@@ -3,10 +3,10 @@ Accounts.onResetPasswordLink(function(token) {
 });
 
 Session.setDefault('whoIsActive', {
-	'home': "",
+	'home': "active",
 	'data': "",
 	'groups': "",
-	'settings': "active",
+	'settings': "",
 });
 
 setActive = function(name) {
