@@ -22,19 +22,23 @@
 	<div class="ui attached segment">
 		{{#unless hash '#2'}}
 		{{#unless hash '#3'}}
-		<div class="ui three column centered grid">
-			<div class="six column centered row">
-				<div class="column">
-					<button class="ui button huge" id="patient">Patient</button>
+			<div class="ui two column middle aligned very relaxed stackable grid">
+				<div class="center aligned column">
+					<div class="ui big labeled icon yellow button" id="patient">
+						<i class="user icon"></i>
+						Patient
+					</div>
 				</div>
-				<div class="column">
-					<div class="ui vertical divider">Or</div>
+				<div class="ui vertical divider">
+					Or
 				</div>
-				<div class="column">
-					<button class="ui button huge" id="medic">Medical staff</button>
+				<div class="center aligned column">
+					<div class="ui big labeled icon orange button" id="medic">
+						<i class="doctor icon"></i>
+						Medic
+					</div>
 				</div>
 			</div>
-		</div>
 		{{/unless}}
 		{{/unless}}
 
