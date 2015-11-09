@@ -1,14 +1,6 @@
 <template name="groups">
-	{{#if isUserPatient}}
-	<h1>Medical staff</h1>
-	<h4>Medical doctor</h4>
-	{{/if}}
-
-	{{#if isUserMedic}}
-	<h1>Patients and medical groups</h1>
-
-	<h4>Your patients</h4>
-	{{/if}}
+	<h1>{{strings.header}}</h1>
+	<h4>{{strings.people}}</h4>
 
 	{{#if people}}
 	<table class="ui striped table">
@@ -39,28 +31,27 @@
 	{{else}}
 		<div class="italic">
 			<i class="warning circle icon"></i>
-			<span>You don't have any patient.</span>
+			<span>You don't have any {{strings.peopleType}}.</span>
 		</div>
 	{{/if}}
 
 	<div class="huge-spacing"></div>
 
-	{{#if isUserPatient}}	
-	<h4>Medical groups</h4>
-	{{/if}}
+	
 
-	{{#if isUserMedic}}
 	<div class="ui grid">
 		<div class="eleven wide column">
-			<h4>Your groups</h4>
+			<h4>{{strings.groups}}</h4>
 		</div>
 		<div class="five wide column right">
+			{{#if isUserMedic}}
 			<div class="ui labeled icon buttons">
 				<button id="add" class="ui tealbis button">
 					<i class="plus icon"></i>
 					Add
 				</button>
 			</div>
+			{{/if}}
 		</div>
 	</div>
 
@@ -78,7 +69,6 @@
 		</form>
 		<div class="big-spacing"></div>
 	</div>
-	{{/if}}
 
 	{{#if groups}}
 	<table class="ui striped table">

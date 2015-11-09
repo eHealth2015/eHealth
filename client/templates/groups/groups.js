@@ -3,6 +3,24 @@ Template.groups.onRendered(function() {
 });
 
 Template.groups.helpers({
+	strings: function() {
+		if(isUserMedic()) {
+			return {
+				header: "Medical groups",
+				people: "Your patients",
+				groups: "Your groups",
+				peopleType: "patient"
+			};
+		}
+		if(isUserPatient()) {
+			return {
+				header: "Medical staff",
+				people: "Medical doctor",
+				groups: "Medical groups",
+				peopleType: "medical doctor"
+			};
+		}
+	},
 	people: function() {
 		if(isUserMedic()) {
 			return [];
