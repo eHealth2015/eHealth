@@ -7,31 +7,19 @@
 	{{#if isUserMedic}}
 	<h1>Patients and medical groups</h1>
 
-	<h4>Create group</h4>
-	(todo: just show when click on a button)
-	<form>
-		<div class="row">
-			<div class="six columns">
-				<label for="exampleEmailInput">Group name</label>
-				<input class="u-full-width" placeholder="Group name" id="groupName" type="text">
-			</div>
-		</div>
-		<input class="button-primary" value="Submit" type="submit">
-	</form>
-
-
 	<h4>Your patients</h4>
 	{{/if}}
 
-	<table class="u-full-width">
+	{{#if people}}
+	<table class="ui striped table">
 		<thead>
 			<tr>
 				<th>First Name</th>
 				<th>Last Name</th>
 				{{#if isUserMedic}}
-				<!-- other fields... -->
+				<th>Last data</th>
 				{{/if}}
-				<th></th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -40,35 +28,72 @@
 				<td>{{firstName}}</td>
 				<td>{{lastName}}</td>
 				{{#if isUserMedic}}
-				<!-- other fields... -->
+					<td>Last data</td>
+					<!-- other fields... -->
 				{{/if}}
-				<td><i class="fa fa-times"></i></td>
+				<td>Toto</td>
 			</tr>
 			{{/each}}
 		</tbody>
 	</table>
+	{{else}}
+		<div class="italic">
+			<i class="warning circle icon"></i>
+			<span>You don't have any patient.</span>
+		</div>
+	{{/if}}
+
+	<div class="huge-spacing"></div>
 
 	{{#if isUserPatient}}	
 	<h4>Medical groups</h4>
 	{{/if}}
 
 	{{#if isUserMedic}}
-	<h4>Your groups</h4>
+	<div class="ui grid">
+		<div class="eleven wide column">
+			<h4>Your groups</h4>
+		</div>
+		<div class="five wide column right">
+			<div class="ui labeled icon buttons">
+				<button id="add" class="ui tealbis button">
+					<i class="plus icon"></i>
+					Add
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="adding-group" style="display:none;">
+		<div class="big-spacing"></div>
+		<form class="ui form">
+			<div class="field">
+				<input type="text" name="group-name" placeholder="Group name" id="groupName">
+			</div>
+			<div class="ui buttons">
+				<button class="ui positive button">Add</button>
+				<div class="or"></div>
+				<button class="ui button" id="cancel-add">Cancel</button>
+			</div>
+		</form>
+		<div class="big-spacing"></div>
+	</div>
 	{{/if}}
-	
-	<table class="u-full-width">
+
+	{{#if groups}}
+	<table class="ui striped table">
 		<thead>
-			<tr>
-				<th>Name</th>
-				{{#if isUserMedic}}
-				<th>Members</th>
-				<th>Patients</th>
-				{{/if}}
-				<th></th>
-			</tr>
+		<tr>
+			<th>Name</th>
+			{{#if isUserMedic}}
+			<th>Members</th>
+			<th>Patients</th>
+			{{/if}}
+			<th>Actions</th>
+		</tr>
 		</thead>
 		<tbody>
-			{{#each groups}}
+		{{#each groups}}
 			<tr>
 				<td>{{name}}</td>
 				{{#if isUserMedic}}
@@ -76,27 +101,29 @@
 				<td>{{patients.length}}</td>
 				{{/if}}
 				<td>
-					<i class="fa fa-chevron-down"></i>
-					<a href="/"><i class="fa fa-times"></i></a>
+					<button class="ui red basic button small" id="deleteGroup" groupId="{{_id}}">Delete</button>
 				</td>
 			</tr>
-			<div class="accordeon">
-				(accordeon)
-				(prévoir des trucs d'admin : ajout et suppr de membres, detele only for admin)
-				<button class="button-primary" id="deleteGroup" groupId="{{_id}}">Delete group</button>
-				<ul>
-				{{#each medics}}
-					<li>{{firstName}} {{lastName}}</li>
-				{{/each}}
-				</ul>
-			</div>
-			{{/each}}
+		{{/each}}
 		</tbody>
 	</table>
+	{{else}}
+		<div class="big-spacing"></div>
+		<div class="italic">
+			<i class="warning circle icon"></i>
+			<span>You don't have any group.</span>
+		</div>
+	{{/if}}
+
+	<div class="huge-spacing"></div>
+
+	<!-- REMARQUES
 	remarques:<br>
 	(accès pour plus d'info sur le patient ? accordéon ?)<br>
 	(todo: remove patient with confirmation)<br>
 	(todo: confimation avant suppr groupe)<br>
 	(todo: harmoniser les tableaux)<br>
-	(todo: espacer la fleche du bas et la croix ?)	
+	(todo: espacer la fleche du bas et la croix ?)
+	-->
+
 </template>

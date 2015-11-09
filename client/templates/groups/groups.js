@@ -33,6 +33,16 @@ Template.groups.helpers({
 });
 
 Template.groups.events({
+	'click #add': function(event) {
+		event.preventDefault();
+		$('.adding-group').show(500);
+		$('#add').fadeOut(500);
+	},
+	'click #cancel-add': function(event) {
+		event.preventDefault();
+		$('.adding-group').hide(500);
+		$('#add').fadeIn(500);
+	},
 	'click #deleteGroup': function(event) {
 		event.preventDefault();
 		var groupId = event.currentTarget.getAttribute("groupId");
