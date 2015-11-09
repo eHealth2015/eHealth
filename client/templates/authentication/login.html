@@ -1,13 +1,17 @@
 <template name="login">
-	<form>
+	<form class="center">
 		<label>Email</label>
-		<input class="u-full-width" type="email" placeholder="Enter your email address" id="email">
+		<div class="ui fluid input">
+			<input class="" type="email" placeholder="Enter your email address" id="email">
+		</div>
 		<label>Password</label>
-		<input class="u-full-width" type="password" placeholder="Enter your password" id="password">
-		<input class="button-primary" type="submit" value="Login">
+		<div class="ui fluid input">
+			<input class="" type="password" placeholder="Enter your password" id="password">
+		</div>
+		<input class="ui button" type="submit" value="LOGIN">
 	</form>
 	<div class="center links">
-		<a href="/register" alt="">Register</a>
+		<a href="/register#1" alt="">Register</a>
 		<a href="/" class="passwordRecovery" alt="">I lost my password</a>
 	</div>
 </template>

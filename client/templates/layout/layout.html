@@ -1,61 +1,53 @@
 <template name="layout">
+	{{#if currentUser}}
 	<div class="sidebar">
 		<ul class="menu">
 
-			{{#if isUserMedic}}
 			<li class="{{whoIsActive.home}}">
 				<a href="/home" alt="Home">
-					<i class="fa fa-home"></i>
+					<i class="home icon icon"></i>
 				</a>
 			</li>
 
 			<li class="{{whoIsActive.data}}">
 				<a href="/data" alt="Data">
-					<i class="fa fa-area-chart"></i>
+					<i class="area chart icon"></i>
 				</a>
 			</li>
 
+			{{#if isUserMedic}}
 			<li class="{{whoIsActive.groups}}">
 				<a href="/groups" alt="Groups and patients">
-					<i class="fa fa-users"></i>
+					<i class="users icon"></i>
 				</a>
 			</li>
 			{{/if}}
 
 			{{#if isUserPatient}}
-			<li class="{{whoIsActive.home}}">
-				<a href="/home" alt="Home">
-					<i class="fa fa-home"></i>
-				</a>
-			</li>
-
-			<li class="{{whoIsActive.data}}">
-				<a href="/data" alt="Data">
-					<i class="fa fa-area-chart"></i>
-				</a>
-			</li>
-
 			<li class="{{whoIsActive.groups}}">
 				<a href="/groups" alt="Medical follow">
-					<i class="fa fa-user-md"></i>
+					<i class="user-md icon"></i>
 				</a>
 			</li>
 			{{/if}}
 
 			<li class="{{whoIsActive.settings}}">
 				<a href="/settings" alt="Settings">
-					<i class="fa fa-cogs"></i>
+					<i class="cogs icon"></i>
 				</a>
 			</li>
 
 			<li>
 				<a href="/login" class="logout" alt="Logout">
-					<i class="fa fa-sign-out"></i>
+					<i class="sign out icon"></i>
 				</a>
 			</li>
 		</ul>
 	</div>
-	<div class="content">
+	<div class="mainContent">
 		{{> yield }}
 	</div>
+	{{else}}
+	{{> yield }}
+	{{/if}}
 </template>

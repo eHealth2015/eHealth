@@ -1,66 +1,130 @@
 <template name="settings">
 	<h1>Settings</h1>
-
-	{{#if isUserUnset}}
-	<h4>Finish your profile</h4>
-	<form>
-		<div class="row">
-			<div class="six columns">
-				<label for="profileType">Profile type</label>
-				<select class="u-full-width" id="profileType">
-					<option value="Patient">Patient</option>
-					<option value="Medic">Medical doctor</option>
-				</select>
-			</div>
-			<div class="six columns">
-				<label for="code">Optionnal code</label>
-				<input class="u-full-width" placeholder="Enter your code if you have one" id="code" type="text">
+	<div class="ui grid">
+		<div class="eight wide column">
+			<div class="ui cards">
+				<div class="card">
+					<a id="settings" class="ui right corner label">
+						<i class="cogs icon"></i>
+					</a>
+					<div class="content">
+						<div class="description">
+							<div class="ui list">
+								<div class="item">
+									<i class="user icon"></i>
+									<div class="content">
+										{{profile.firstName}} {{profile.lastName}}
+									</div>
+								</div>
+								<div class="item">
+									<i class="chevron right icon"></i>
+									<div class="content">
+										{{#if isUserMedic}}
+										{{profile.title}}
+										{{else}}
+										Patient
+										{{/if}}
+									</div>
+								</div>
+								{{#if isUserPatient}}
+								<div class="item">
+									<i class="venus mars icon"></i>
+									<div class="content">
+										{{profile.gender}}
+									</div>
+								</div>
+								{{/if}}
+								<div class="item">
+									<i class="mail icon"></i>
+									<div class="content">
+										<a href="mailto:jack@semantic-ui.com">{{email.address}}</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="six columns">
-				<label for="firstName">First name</label>
-				<input class="u-full-width" placeholder="Enter your first name" id="firstName" type="text">
-			</div>
-			<div class="six columns">
-				<label for="firstName">Last name</label>
-				<input class="u-full-width" placeholder="Enter your last name" id="lastName" type="text">
-			</div>
-		</div>
-		<input class="button-primary" value="Submit" type="submit">
-	</form>
-	{{else}}
-	<div class="row">
-		<div class="seven columns">
-			<h4>Your profile</h4>
-		</div>
-		<div class="five collumns right">
-			<button>Change password</button>
-			<button>Edit</button>
+		<div class="eight wide column right">
+			<button id="delete" class="ui red button">Delete account</button>
 		</div>
 	</div>
-	<ul>
-		<li>Account type: {{ profile.type }}</li>
-		<li>First name: {{ profile.firstName }}</li>
-		<li>Last name: {{ profile.lastName }}</li>
-		<li>
-			<span>Email: {{ email.address }}</span>
-
-			{{#if email.verified }}
-				<span class="small button green">
-					<i class="fa fa-check"></i>
-				</span>
-			{{else}}
-				<span class="small button red">
-					<i class="fa fa-times"></i>
-					Re-send an email
-				</span>
-			{{/if}}
-		</li>
-	</ul>
-
-	<div class="right">
-		<button>Delete my account</button>
+	<div id="modalEdit" class="ui modal">
+		<i class="close icon"></i>
+		<div class="header">
+			Edit your profile
+		</div>
+		<form id="editform">
+			<div class="ui form">
+				<div class="two centered fields">
+					<div class="field">
+						<label>First name</label>
+							<input id="firstName" placeholder="First Name" name="firstName" type="text" value="{{profile.firstName}}">
+					</div>
+					<div class="field">
+						<label>Last name</label>
+						<input id="lastName" placeholder="Last Name" name="lastName" type="text" value="{{profile.lastName}}">
+					</div>
+				</div>
+				<div class="two centered fields">
+					{{#if isUserMedic}}
+					<div class="field">
+						<label>Title</label>
+						<select id="title" class="ui dropdown" value="{{profile.title}}">
+							<option value="Doctor">Doctor</option>
+							<option value="Misses">Misses</option>
+							<option value="Mister">Mister</option>
+							<option value="Miss">Miss</option>
+						</select>
+					</div>
+					{{/if}}
+					{{#if isUserPatient}}
+					<div class="field">
+						<label>Gender</label>
+						<select id="gender" class="ui dropdown" value="{{profile.gender}}">
+							<option value="male">Male</option>
+							<option value="female">Female</option>
+						</select>
+					</div>
+					{{/if}}
+					<div class="field">
+						<label>Email address</label>
+						<input id="email" placeholder="Email" name="email" type="email" value="{{email.address}}">
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="actions">
+			<div class="ui positive right labeled icon button">
+				Update
+				<i class="checkmark icon"></i>
+			</div>
+			<div class="ui black deny button">
+				Cancel
+			</div>
+		</div>
 	</div>
-	{{/if}}
+	<div id="modalDelete" class="ui small basic modal">
+		<i class="close icon"></i>
+		<div class="ui icon header">
+			<i class="trash outline icon"></i>
+			Deleting account
+		</div>
+		<div class="content">
+			<p>Are you sure you want to delete your account ?</p>
+		</div>
+		<div class="actions">
+			
+				<div class="ui red inverted button">
+					<i class="remove icon"></i>
+					No
+				</div>
+				<div class="ui green ok inverted button">
+					<i class="checkmark icon"></i>
+					Yes
+				</div>
+			
+		</div>
+	</div>
 </template>

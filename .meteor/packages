@@ -19,5 +19,8 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 iron:router
 accounts-password
 msavin:mongol
-fortawesome:fontawesome
 utilities:spin
+semantic:ui
+flemay:less-autoprefixer
+semantic:ui-dropdown
+semantic:ui-modal

@@ -28,8 +28,11 @@ AppRouter = RouteController.extend({
 	}
 });
 
-Router.route('/', function () {
-	this.redirect('/home');
+Router.route('/', {
+	controller: 'AuthRouter',
+	action: function () {
+		this.redirect('/home');
+	}
 });
 
 Router.route('/login', {
