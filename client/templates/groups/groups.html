@@ -7,19 +7,6 @@
 	{{#if isUserMedic}}
 	<h1>Patients and medical groups</h1>
 
-	<h4>Create group</h4>
-	(todo: just show when click on a button)
-	<form>
-		<div class="row">
-			<div class="six columns">
-				<label for="exampleEmailInput">Group name</label>
-				<input class="u-full-width" placeholder="Group name" id="groupName" type="text">
-			</div>
-		</div>
-		<input class="button-primary" value="Submit" type="submit">
-	</form>
-
-
 	<h4>Your patients</h4>
 	{{/if}}
 
@@ -69,12 +56,27 @@
 		</div>
 		<div class="five wide column right">
 			<div class="ui labeled icon buttons">
-				<button class="ui tealbis button">
+				<button id="add" class="ui tealbis button">
 					<i class="plus icon"></i>
 					Add
 				</button>
 			</div>
 		</div>
+	</div>
+
+	<div class="adding-group" style="display:none;">
+		<div class="big-spacing"></div>
+		<form class="ui form">
+			<div class="field">
+				<input type="text" name="group-name" placeholder="Group name" id="groupName">
+			</div>
+			<div class="ui buttons">
+				<button class="ui positive button">Add</button>
+				<div class="or"></div>
+				<button class="ui button" id="cancel-add">Cancel</button>
+			</div>
+		</form>
+		<div class="big-spacing"></div>
 	</div>
 	{{/if}}
 
