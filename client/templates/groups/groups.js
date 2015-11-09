@@ -76,3 +76,7 @@ Template.groups.events({
 		});
 	}
 });
+
+Template.groups.onRendered(function() {
+
+});

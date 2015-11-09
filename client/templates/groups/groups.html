@@ -37,8 +37,6 @@
 
 	<div class="huge-spacing"></div>
 
-	
-
 	<div class="ui grid">
 		<div class="eleven wide column">
 			<h4>{{strings.groups}}</h4>
@@ -91,7 +89,15 @@
 				<td>{{patients.length}}</td>
 				{{/if}}
 				<td>
-					<button class="ui red basic button small" id="deleteGroup" groupId="{{_id}}">Delete</button>
+					<button class="ui tiny yellow basic icon button">
+						<i class="info icon"></i>
+						Details
+					</button>
+
+					<button class="ui tiny red basic icon button" id="deleteGroup" groupId="{{_id}}">
+						<i class="remove icon"></i>
+						Delete
+					</button>
 				</td>
 			</tr>
 		{{/each}}
