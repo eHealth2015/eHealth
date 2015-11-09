@@ -71,6 +71,24 @@ input[type="submit"] {
 	margin-left: .5em;
 }
 
+.ui.tealbis.button {
+	background-color: #00b5ad;
+	color: #ffffff;
+	text-shadow: none;
+	background-image: none;
+}
+
+.ui.tealbis.button:hover {
+	background-color: #47C7C2;
+	color: #ffffff;
+	text-shadow: none;
+	background-image: none;
+}
+
+.italic {
+	font-style: italic;
+}
+
 .button.green {
 	border-color: #539642;
 	background-color: #539642;
@@ -90,6 +108,18 @@ input[type="submit"] {
 table thead th {
 	font-weight: 400;
 	font-style: italic;
+}
+
+.small-spacing {
+	padding-bottom: 1em;
+}
+
+.big-spacing {
+	padding-bottom: 2em;
+}
+
+.huge-spacing {
+	padding-bottom: 4em;
 }
 
 /* Sidebar */
