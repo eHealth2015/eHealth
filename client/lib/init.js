@@ -20,13 +20,6 @@ setActive = function(name) {
 	Session.set('whoIsActive', obj);
 };
 
-Session.setDefault('hash', window.location.hash);
-
-window.onhashchange = function() {
-	Session.set('hash', window.location.hash);
-};
-
-
 Template.registerHelper('isUserMedic', function() {
 	if(Meteor.user() && Meteor.user().profile)
 		return Meteor.user().profile.type === "Medic";

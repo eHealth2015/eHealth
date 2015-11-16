@@ -65,7 +65,7 @@ Template.register.helpers({
 			return Meteor.user().profile;
 	},
 	'hash': function(number) {
-		return Session.get('hash') === number;
+		return Router.current().getParams().hash == number;
 	},
 	'steps': function(number) {
 		switch(Session.get('hash')) {

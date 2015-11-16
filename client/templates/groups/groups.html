@@ -89,15 +89,10 @@
 				<td>{{patients.length}}</td>
 				{{/if}}
 				<td>
-					<button class="ui tiny yellow basic icon button">
+					<a href="#{{_id}}" id="showDetails" class="ui tiny yellow basic icon button">
 						<i class="info icon"></i>
 						Details
-					</button>
-
-					<button class="ui tiny red basic icon button" id="deleteGroup" groupId="{{_id}}">
-						<i class="remove icon"></i>
-						Delete
-					</button>
+					</a>
 				</td>
 			</tr>
 		{{/each}}
@@ -122,4 +117,144 @@
 	(todo: espacer la fleche du bas et la croix ?)
 	-->
 
+	{{> groupDetails group}}
+
+</template>
+
+<template name="groupDetails">
+	<div id="groupDetailsModal" class="ui modal">
+		<i class="close icon"></i>
+		<div class="header">
+			{{name}}
+		</div>
+		<div class="content">
+			{{#if isUserMedic}}
+			<div class="ui grid">
+				<div class="seven wide column">
+					<h4>Patients</h4>
+				</div>
+				<div class="three wide column ui input">
+					<input id="addPatientFirstName" placeholder="First name" name="newPatientFirstName" type="text">
+				</div>
+				<div class="three wide column ui input">
+					<input id="addPatientLastName" placeholder="Last name" name="newPatientLastName" type="text">
+				</div>
+				<div class="three wide column">
+					<div class="ui labeled icon buttons">
+						<button id="addPatient" class="ui tealbis button">
+							<i class="plus icon"></i>
+							Add
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="big-spacing"></div>
+			{{#if patients}}
+			<table class="ui striped table">
+				<thead>
+					<tr>
+						<th>First name</th>
+						<th>last name</th>
+						<th>Gender</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each patients}}
+					<tr>
+						<td>{{firstName}}</td>
+						<td>{{lastName}}</td>
+						<td>{{gender}}</td>
+						<td>
+							<button href="#{{_id}}" id="showDetail" class="ui tiny yellow basic icon button">
+								<i class="mail outline icon"></i>
+								Message
+							</button>
+							{{#if ../admin}}
+							<button class="ui tiny red basic icon button" id="deletePatient" patientId="{{_id}}">
+								<i class="remove icon"></i>
+								Remove
+							</button>
+							{{/if}}
+						</td>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+			{{else}}
+				<div class="italic">
+					<i class="warning circle icon"></i>
+					<span>There is no patient.</span>
+				</div>
+			{{/if}}
+			<div class="big-spacing"></div>
+			{{/if}}
+			<div class="ui grid">
+				<div class="seven wide column">
+					<h4>Medical staff</h4>
+				</div>
+				<div class="three wide column ui input">
+					<input id="addMedicFirstName" placeholder="First name" name="newMedicFirstName" type="text">
+				</div>
+				<div class="three wide column ui input">
+					<input id="addMedicLastName" placeholder="Last name" name="newMedicLastName" type="text">
+				</div>
+				<div class="three wide column">
+					<div class="ui labeled icon buttons">
+						<button id="addMedic" class="ui tealbis button">
+							<i class="plus icon"></i>
+							Add
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="big-spacing"></div>
+			<table class="ui striped table">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>First name</th>
+						<th>last name</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each medics}}
+					<tr>
+						<td>{{title}}</td>
+						<td>{{firstName}}</td>
+						<td>{{lastName}}</td>
+						<td>
+							<a href="#{{_id}}" id="showDetails" class="ui tiny yellow basic icon button">
+								<i class="info icon"></i>
+								TBD
+							</a>
+
+							<button class="ui tiny red basic icon button" id="deleteGroup" groupId="{{_id}}">
+								<i class="remove icon"></i>
+								TBD
+							</button>
+						</td>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+			{{#if admin}}
+			<div class="big-spacing"></div>
+			<div class="ui grid">
+				<div class="three wide column ui input">
+					<input id="newName" value="{{name}}" name="newName" type="text">
+				</div>
+				<div class="four wide column">
+					<button id="changeName" class="ui button">Change name</button>
+				</div>
+				<div class="five wide column"></div>
+				<div class="four wide column">
+					<button id="deleteGroup1" class="ui button red">Delete the group</button>
+					<button id="deleteGroup2" class="ui button red" style="display: none;">Click again to delete</button>
+				</div>
+			</div>
+			{{/if}}
+		</div>
+	</div>
 </template>

@@ -44,6 +44,10 @@ Groups.allow({
 		else
 			return false;
 	},
+	update: function(userId) {
+		// TODO CHECK IF ADMIN
+		return true;
+	},
 	remove: function(userId, doc) {
 		for(var i = 0; i < doc.medics.length; i++) {
 			if(doc.medics[i]._id === userId)
