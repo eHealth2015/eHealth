@@ -19,10 +19,11 @@ Meteor.users.allow({
 
 Meteor.publish("userData", function () {
 	if (this.userId) {
+		var thisUser = Meteor.users.findOne({_id: this.userId});
 		var groupsCursor = getGroupsByUserId(this.userId);
 		if(groupsCursor) {
 			var groups = groupsCursor.fetch();
-			var ids = [];
+			var ids = [this.userId];
 			for(var i = 0, group = groups[0]; i < groups.length; i++, group = groups[i]) {
 				for(var j = 0; j < group.medics.length; j++)
 					ids.push(group.medics[j]._id);
@@ -30,17 +31,24 @@ Meteor.publish("userData", function () {
 					for(var j = 0; j < group.patients.length; j++)
 						ids.push(group.patients[j]._id);
 			}
-			return Meteor.users.find({
-					_id: { $in: ids}
-				}, {
-					fields: {
-						'profile.firstName': 1,
-						'profile.lastName': 1
-					}
-				});
 		}
-		else
-			this.ready();
+		if(thisUser.profile.type === "Medic") {
+			for(var i = 0; i < thisUser.profile.patients.length; i++) {
+				ids.push(thisUser.profile.patients[i]._id);
+			}
+		}
+
+		return Meteor.users.find({
+			_id: {
+				$in: ids
+			}
+		}, {
+			fields: {
+				// 'profile.firstName': 1,
+				// 'profile.lastName': 1
+				profile: 1
+			}
+		});
 	} else
 		this.ready();
 });

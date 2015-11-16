@@ -1,7 +1,45 @@
 <template name="groups">
 	<h1>{{strings.header}}</h1>
-	<h4>{{strings.people}}</h4>
 
+	<!-- People -->
+	<!-- Row with header people and add button -->
+	<div class="ui grid">
+		<div class="eleven wide column">
+			<h4>{{strings.people}}</h4>
+		</div>
+		<div class="five wide column right">
+			{{#if isUserMedic}}
+			<div class="ui labeled icon buttons">
+				<button id="addPatient" class="ui tealbis button">
+					<i class="plus icon"></i>
+					Add
+				</button>
+			</div>
+			{{/if}}
+		</div>
+	</div>
+
+	<!-- hidden add patient row -->
+	{{#if isUserMedic}}
+	<div class="adding-patient" style="display:none;">
+		<div class="big-spacing"></div>
+		<form id="addPatientForm" class="ui form">
+			<div class="field">
+				<input type="text" name="patient-first-name" placeholder="First name" id="addPatientFirstName">
+			</div>
+			<div class="field">
+				<input type="text" name="patient-last-name" placeholder="Last name" id="addPatientLastName">
+			</div>
+			<div class="ui buttons">
+				<button class="ui positive button" id="confirmeAddPatient" >Add</button>
+				<div class="or"></div>
+				<button class="ui button" id="cancelAddPatient">Cancel</button>
+			</div>
+		</form>
+	</div>
+	{{/if}}
+
+	<!-- people table -->
 	{{#if people}}
 	<table class="ui striped table">
 		<thead>
@@ -23,13 +61,23 @@
 					<td>Last data</td>
 					<!-- other fields... -->
 				{{/if}}
-				<td>Toto</td>
+				<td>
+					<button receiverId="{{_id}}" class="ui tiny yellow basic icon button newMessage">
+						<i class="mail outline icon"></i>
+						Message
+					</button>
+					<button class="ui tiny red basic icon button" id="deletePatientFromMedic" patientId="{{_id}}">
+						<i class="remove icon"></i>
+						Remove
+					</button>
+				</td>
 			</tr>
 			{{/each}}
 		</tbody>
 	</table>
 	{{else}}
 		<div class="italic">
+			<div class="big-spacing"></div>
 			<i class="warning circle icon"></i>
 			<span>You don't have any {{strings.peopleType}}.</span>
 		</div>
@@ -37,6 +85,8 @@
 
 	<div class="huge-spacing"></div>
 
+	<!-- Groups -->
+	<!-- Row with header groups and add button -->
 	<div class="ui grid">
 		<div class="eleven wide column">
 			<h4>{{strings.groups}}</h4>
@@ -44,7 +94,7 @@
 		<div class="five wide column right">
 			{{#if isUserMedic}}
 			<div class="ui labeled icon buttons">
-				<button id="add" class="ui tealbis button">
+				<button id="addGroup" class="ui tealbis button">
 					<i class="plus icon"></i>
 					Add
 				</button>
@@ -53,21 +103,22 @@
 		</div>
 	</div>
 
+	<!-- hidden add group row -->
 	<div class="adding-group" style="display:none;">
 		<div class="big-spacing"></div>
-		<form class="ui form">
+		<form id="addGroupForm" class="ui form">
 			<div class="field">
 				<input type="text" name="group-name" placeholder="Group name" id="groupName">
 			</div>
 			<div class="ui buttons">
-				<button class="ui positive button">Add</button>
+				<button class="ui positive button" id="confirmAddGroup">Add</button>
 				<div class="or"></div>
-				<button class="ui button" id="cancel-add">Cancel</button>
+				<button class="ui button" id="cancelAddGroup">Cancel</button>
 			</div>
 		</form>
-		<div class="big-spacing"></div>
 	</div>
 
+	<!-- groups table -->
 	{{#if groups}}
 	<table class="ui striped table">
 		<thead>
@@ -89,7 +140,7 @@
 				<td>{{patients.length}}</td>
 				{{/if}}
 				<td>
-					<a href="#{{_id}}" id="showDetails" class="ui tiny yellow basic icon button">
+					<a href="#{{_id}}" id="showGroupDetails" class="ui tiny yellow basic icon button">
 						<i class="info icon"></i>
 						Details
 					</a>
@@ -124,31 +175,41 @@
 <template name="groupDetails">
 	<div id="groupDetailsModal" class="ui modal">
 		<i class="close icon"></i>
+
 		<div class="header">
 			{{name}}
 		</div>
+
 		<div class="content">
+
+			<!-- Patients only for medics -->
 			{{#if isUserMedic}}
+			<!-- Patients header row and add form -->
 			<div class="ui grid">
 				<div class="seven wide column">
 					<h4>Patients</h4>
 				</div>
+				{{#if admin}}
 				<div class="three wide column ui input">
-					<input id="addPatientFirstName" placeholder="First name" name="newPatientFirstName" type="text">
+					<input id="addPatientFirstName2group" placeholder="First name" name="newPatientFirstName" type="text">
 				</div>
 				<div class="three wide column ui input">
-					<input id="addPatientLastName" placeholder="Last name" name="newPatientLastName" type="text">
+					<input id="addPatientLastName2group" placeholder="Last name" name="newPatientLastName" type="text">
 				</div>
 				<div class="three wide column">
 					<div class="ui labeled icon buttons">
-						<button id="addPatient" class="ui tealbis button">
+						<button id="addPatient2group" class="ui tealbis button">
 							<i class="plus icon"></i>
 							Add
 						</button>
 					</div>
 				</div>
+				{{/if}}
 			</div>
+
 			<div class="big-spacing"></div>
+
+			<!-- Patients table in groups -->
 			{{#if patients}}
 			<table class="ui striped table">
 				<thead>
@@ -166,12 +227,12 @@
 						<td>{{lastName}}</td>
 						<td>{{gender}}</td>
 						<td>
-							<button href="#{{_id}}" id="showDetail" class="ui tiny yellow basic icon button">
+							<button peopleId="{{_id}}" class="ui tiny yellow basic icon button newMessage">
 								<i class="mail outline icon"></i>
 								Message
 							</button>
 							{{#if ../admin}}
-							<button class="ui tiny red basic icon button" id="deletePatient" patientId="{{_id}}">
+							<button class="ui tiny red basic icon button" id="deletePatientFromGroup" patientId="{{_id}}">
 								<i class="remove icon"></i>
 								Remove
 							</button>
@@ -189,26 +250,34 @@
 			{{/if}}
 			<div class="big-spacing"></div>
 			{{/if}}
+
+			<!-- Groups members -->
+			<!-- Groups header row and add form -->
 			<div class="ui grid">
 				<div class="seven wide column">
 					<h4>Medical staff</h4>
 				</div>
+				{{#if admin}}
 				<div class="three wide column ui input">
-					<input id="addMedicFirstName" placeholder="First name" name="newMedicFirstName" type="text">
+					<input id="addMedicFirstName2group" placeholder="First name" name="newMedicFirstName" type="text">
 				</div>
 				<div class="three wide column ui input">
-					<input id="addMedicLastName" placeholder="Last name" name="newMedicLastName" type="text">
+					<input id="addMedicLastName2group" placeholder="Last name" name="newMedicLastName" type="text">
 				</div>
 				<div class="three wide column">
 					<div class="ui labeled icon buttons">
-						<button id="addMedic" class="ui tealbis button">
+						<button id="addMedic2group" class="ui tealbis button">
 							<i class="plus icon"></i>
 							Add
 						</button>
 					</div>
 				</div>
+				{{/if}}
 			</div>
+
 			<div class="big-spacing"></div>
+
+			<!-- Groups members table -->
 			<table class="ui striped table">
 				<thead>
 					<tr>
@@ -225,28 +294,32 @@
 						<td>{{firstName}}</td>
 						<td>{{lastName}}</td>
 						<td>
-							<a href="#{{_id}}" id="showDetails" class="ui tiny yellow basic icon button">
-								<i class="info icon"></i>
-								TBD
-							</a>
-
-							<button class="ui tiny red basic icon button" id="deleteGroup" groupId="{{_id}}">
-								<i class="remove icon"></i>
-								TBD
+							<button receiverId="{{_id}}" class="ui tiny yellow basic icon button newMessage">
+								<i class="mail outline icon"></i>
+								Message
 							</button>
+							{{#if ../admin}}
+							<button class="ui tiny red basic icon button" id="deleteMedicFromGroup" medicId="{{_id}}">
+								<i class="remove icon"></i>
+								Remove
+							</button>
+							{{/if}}
 						</td>
 					</tr>
 					{{/each}}
 				</tbody>
 			</table>
+
+			<!-- admin panel -->
 			{{#if admin}}
 			<div class="big-spacing"></div>
+
 			<div class="ui grid">
 				<div class="three wide column ui input">
-					<input id="newName" value="{{name}}" name="newName" type="text">
+					<input id="newGroupName" value="{{name}}" name="newName" type="text">
 				</div>
 				<div class="four wide column">
-					<button id="changeName" class="ui button">Change name</button>
+					<button id="changeGroupName" class="ui button">Change name</button>
 				</div>
 				<div class="five wide column"></div>
 				<div class="four wide column">

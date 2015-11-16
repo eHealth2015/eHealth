@@ -28,31 +28,35 @@ Template.settings.onRendered(function() {
 	$('select.dropdown').dropdown();
 	$('#modalEdit').modal({
 		onApprove : function() {
-			var profile = {
-				firstName: $('#firstName')[0].value,
-				lastName: $('#lastName')[0].value,
-			};
+			var currentEmailAddr = Meteor.user().emails[0].address;
+
+			var firstName = $('#firstName')[0].value;
+			var lastName = $('#lastName')[0].value;
 			var email = $('#email')[0].value;
-			if(isUserMedic()) {
-				profile.title = $('#title')[0].value;
-				profile.type = "Medic";
-			}
-			if(isUserPatient()) {
-				profile.gender = $('#gender')[0].value;
-				profile.type = "Patient";
-			}
+
+			var obj = {};
+			obj['profile.firstName'] = firstName;
+			obj['profile.lastName'] = lastName;
+
+			if(email != currentEmailAddr)
+				obj.emails = [{address: email, verified: false}];
+
+			if(isUserMedic())
+				obj['profile.title'] = $('#title')[0].value;
+
+			else if(isUserPatient())
+				obj['profile.gender'] = $('#gender')[0].value;
+
 			Meteor.users.update({_id: Meteor.userId()}, {
-				$set: {
-					emails: [{address: email, verified: false}],
-					profile: profile
-				}
+				$set: obj
 			});
 			return true;
 		}
 	});
 	$('#modalDelete').modal({
-		onApprove : function() {
-			Meteor.users.remove({_id: Meteor.userId()});
+		detachable: false,
+		onApprove: function() {
+			Meteor.call('deleteUser');
 			Router.go('/login');
 			return true;
 		}
