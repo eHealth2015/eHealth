@@ -23,7 +23,7 @@ Template.groups.helpers({
 	},
 	people: function() {
 		if(isUserMedic()) {
-			return Meteor.user().profile.patients.map(function(patient) {
+			return Meteor.user().patients.map(function(patient) {
 				var user = Meteor.users.findOne({_id: patient._id});
 				if(user) {
 					patient.firstName = user.profile.firstName;
@@ -82,7 +82,7 @@ Template.groups.events({
 		var patientId = this._id;
 		Meteor.users.update({_id: Meteor.userId()}, {
 			$pull: {
-				'profile.patients': {
+				'patients': {
 					_id: patientId
 				}
 			}
@@ -126,7 +126,7 @@ Template.groups.events({
 					console.log(error);
 				}
 				else {
-					Meteor.subscribe("userData");
+					Meteor.subscribe("getOtherUsers")
 					template.find('#addPatientFirstName2group').value = "";
 					template.find('#addPatientLastName2group').value = "";
 				}
@@ -145,7 +145,7 @@ Template.groups.events({
 					console.log(error);
 				}
 				else {
-					Meteor.subscribe("userData");
+					Meteor.subscribe("getOtherUsers")
 					template.find('#addMedicFirstName2group').value = "";
 					template.find('#addMedicLastName2group').value = "";
 				}
@@ -211,7 +211,7 @@ Template.groups.events({
 			if(error)
 				console.log(error);
 			else {
-				Meteor.subscribe("userData");
+				Meteor.subscribe("getOtherUsers")
 				$('.adding-patient').hide(500);
 				$('#addPatient').fadeIn(500);
 				template.find('#addPatientFirstName').value = "";

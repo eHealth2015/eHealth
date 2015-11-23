@@ -8,7 +8,7 @@ Meteor.methods({
 			if(patient && patient.profile.type === "Patient") {
 				Meteor.users.update({_id: this.userId}, {
 					$addToSet: {
-						'profile.patients': {
+						'patients': {
 							_id: patient._id,
 							confirmed: false
 						}

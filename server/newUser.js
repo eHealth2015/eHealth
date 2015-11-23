@@ -2,7 +2,7 @@ Accounts.onCreateUser(function(options, user) {
 	if (options.profile) {
     	user.profile = options.profile;
 		if(user.profile.type === "Medic") {
-			user.profile.patients = [];
+			user.patients = [];
 		}
 		return user;
 	}

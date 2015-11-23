@@ -21,14 +21,18 @@ Meteor.publish("getOtherUsers", function () {
 			}
 		}
 		if(thisUser.profile.type === "Medic") {
-			for(var i = 0; i < thisUser.profile.patients.length; i++) {
-				ids.push(thisUser.profile.patients[i]._id);
+			for(var i = 0; i < thisUser.patients.length; i++) {
+				ids.push(thisUser.patients[i]._id);
 			}
 		}
 
 		return Meteor.users.find({ _id: {
 			$in: ids
-		}});
+		}}, {
+			fields: {
+				'profile': 1
+			}
+		});
 	} else
 		this.ready();
 });

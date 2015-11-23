@@ -80,3 +80,7 @@ Router.route('messages', {
 Router.route('settings', {
 	controller: 'AppRouter'
 });
+
+Router.route('dev', {
+	controller: 'AppRouter'
+});
