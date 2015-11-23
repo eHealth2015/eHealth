@@ -62,11 +62,11 @@
 					<!-- other fields... -->
 				{{/if}}
 				<td>
-					<button receiverId="{{_id}}" class="ui tiny yellow basic icon button newMessage">
+					<a href="#{{_id}}" class="ui tiny yellow basic icon button">
 						<i class="mail outline icon"></i>
 						Message
-					</button>
-					<button class="ui tiny red basic icon button" id="deletePatientFromMedic" patientId="{{_id}}">
+					</a>
+					<button class="ui tiny red basic icon button" id="deletePatientFromMedic">
 						<i class="remove icon"></i>
 						Remove
 					</button>
@@ -140,7 +140,7 @@
 				<td>{{patients.length}}</td>
 				{{/if}}
 				<td>
-					<a href="#{{_id}}" id="showGroupDetails" class="ui tiny yellow basic icon button">
+					<a href="groups/{{_id}}" id="showGroupDetails" class="ui tiny yellow basic icon button">
 						<i class="info icon"></i>
 						Details
 					</a>
@@ -227,12 +227,12 @@
 						<td>{{lastName}}</td>
 						<td>{{gender}}</td>
 						<td>
-							<button peopleId="{{_id}}" class="ui tiny yellow basic icon button newMessage">
+							<a href="#{{_id}}" class="ui tiny yellow basic icon button">
 								<i class="mail outline icon"></i>
 								Message
-							</button>
+							</a>
 							{{#if ../admin}}
-							<button class="ui tiny red basic icon button" id="deletePatientFromGroup" patientId="{{_id}}">
+							<button class="ui tiny red basic icon button" id="deletePatientFromGroup">
 								<i class="remove icon"></i>
 								Remove
 							</button>
@@ -294,12 +294,12 @@
 						<td>{{firstName}}</td>
 						<td>{{lastName}}</td>
 						<td>
-							<button receiverId="{{_id}}" class="ui tiny yellow basic icon button newMessage">
+							<a href="#{{_id}}" class="ui tiny yellow basic icon button">
 								<i class="mail outline icon"></i>
 								Message
-							</button>
+							</a>
 							{{#if ../admin}}
-							<button class="ui tiny red basic icon button" id="deleteMedicFromGroup" medicId="{{_id}}">
+							<button class="ui tiny red basic icon button" id="deleteMedicFromGroup">
 								<i class="remove icon"></i>
 								Remove
 							</button>

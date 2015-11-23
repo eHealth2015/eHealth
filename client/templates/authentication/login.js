@@ -9,6 +9,7 @@ Template.login.events({
 				// TODO SHOW ERROR
 				console.error(error);
 			} else {
+				EncryptionUtils.onSignIn(password);
 				Router.go('/home');
 			}
 		});

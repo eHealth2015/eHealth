@@ -1,0 +1,26 @@
+<template name="sendMessageModal">
+	<div id="sendMessageModal" class="ui small modal">
+		<i class="close icon"></i>
+		
+		<div class="header">
+			Send a message
+		</div>
+
+		<div class="content ui form">
+			<div class="field">
+				<label style="text-align: left !important;">Message to: {{firstName}} {{lastName}}</label>
+				<textarea id="message"></textarea>
+			</div>
+		</div>
+		
+		<div class="actions">
+			<div class="ui black deny button">
+				Cancel
+			</div>
+			<div class="ui positive right labeled icon button">
+				Send
+				<i class="send icon"></i>
+			</div>
+		</div>
+	</div>
+</template>

@@ -6,6 +6,7 @@ Session.setDefault('whoIsActive', {
 	'home': "active",
 	'data': "",
 	'groups': "",
+	'messages': "",
 	'settings': "",
 });
 
@@ -14,6 +15,7 @@ setActive = function(name) {
 		'home': "",
 		'data': "",
 		'groups': "",
+		'messages': "",
 		'settings': "",
 	};
 	obj[name] = "active";
@@ -43,4 +45,8 @@ Template.registerHelper('isUserUnset', function() {
 
 Template.registerHelper('isCordova', function() {
 	return Meteor.isCordova;
+});
+
+EncryptionUtils.configure({
+	enforceEmailVerification: false
 });

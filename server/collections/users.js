@@ -1,29 +1,17 @@
-// Meteor.users.deny({
-// 	update: function() {
-// 		return true;
-// 	}
-// });
-
-Meteor.users.allow({
-	update: function() {
-		// TODO : check if it is ok...
-		return true;
-	},
-	remove: function(userId, doc) {
-		if(doc._id === userId)
-			return true;
-		else
-			return false;
-	}
+Meteor.publish("userData", function () {
+	if (this.userId)
+		return Meteor.users.find({_id: this.userId});
+	else
+		this.ready();
 });
 
-Meteor.publish("userData", function () {
+Meteor.publish("getOtherUsers", function () {
 	if (this.userId) {
 		var thisUser = Meteor.users.findOne({_id: this.userId});
 		var groupsCursor = getGroupsByUserId(this.userId);
 		if(groupsCursor) {
 			var groups = groupsCursor.fetch();
-			var ids = [this.userId];
+			var ids = [];
 			for(var i = 0, group = groups[0]; i < groups.length; i++, group = groups[i]) {
 				for(var j = 0; j < group.medics.length; j++)
 					ids.push(group.medics[j]._id);
@@ -38,17 +26,28 @@ Meteor.publish("userData", function () {
 			}
 		}
 
-		return Meteor.users.find({
-			_id: {
-				$in: ids
-			}
-		}, {
-			fields: {
-				// 'profile.firstName': 1,
-				// 'profile.lastName': 1
-				profile: 1
-			}
-		});
+		return Meteor.users.find({ _id: {
+			$in: ids
+		}});
 	} else
 		this.ready();
 });
+
+Meteor.users.allow({
+	update: function() {
+		// TODO : check if it is ok...
+		return true;
+	},
+	remove: function(userId, doc) {
+		if(doc._id === userId)
+			return true;
+		else
+			return false;
+	}
+});
+
+// Meteor.users.deny({
+// 	update: function() {
+// 		return true;
+// 	}
+// });

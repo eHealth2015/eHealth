@@ -1,8 +1,11 @@
 Accounts.onCreateUser(function(options, user) {
-	if(user.profile.type === "Medic") {
-		user.profile.patients = [];
+	if (options.profile) {
+    	user.profile = options.profile;
+		if(user.profile.type === "Medic") {
+			user.profile.patients = [];
+		}
+		return user;
 	}
-	user.profile.publicKey = "";
-	user.profile.privateKey = "";
-	return user;
+	else
+		throw new Meteor.Error("newuser-malformed", "Malformed new user, registration aborted");
 });

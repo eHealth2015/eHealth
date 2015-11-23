@@ -1,0 +1,12 @@
+<template name="messages">
+	<h1>Messages template</h1>
+	{{#each messages}}
+		{{> message}}
+	{{/each}}
+</template>
+
+<template name="message">
+	{{#with messageObj}}
+	<p>From: {{senderFirstName}} {{senderLastName}} | text: {{message}}</p><br>
+	{{/with}}
+</template>

@@ -31,6 +31,12 @@
 			</li>
 			{{/if}}
 
+			<li class="{{whoIsActive.messages}}">
+				<a href="/messages" alt="Messages">
+					<i class="mail icon"></i>
+				</a>
+			</li>
+
 			<li class="{{whoIsActive.settings}}">
 				<a href="/settings" alt="Settings">
 					<i class="cogs icon"></i>
@@ -45,9 +51,11 @@
 		</ul>
 	</div>
 	<div class="mainContent">
-		{{> yield }}
+		{{> yield}}
 	</div>
 	{{else}}
-	{{> yield }}
+	{{> yield}}
 	{{/if}}
+
+	{{> sendMessageModal receiver}}
 </template>

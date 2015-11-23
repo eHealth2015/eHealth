@@ -12,7 +12,7 @@ Template.groups.helpers({
 				peopleType: "patient"
 			};
 		}
-		if(isUserPatient()) {
+		else if(isUserPatient()) {
 			return {
 				header: "Medical staff",
 				people: "Medical doctor",
@@ -39,9 +39,9 @@ Template.groups.helpers({
 		return [];
 	},
 	group: function() {
-		var hash = Router.current().getParams().hash;
-		if(hash != "") {
-			var group = Groups.findOne({_id: hash});
+		var groupId = Router.current().getParams()._id;
+		if(groupId != "") {
+			var group = Groups.findOne({_id: groupId});
 			if(group) {
 				group.medics.map(function(medic) {
 					var user = Meteor.users.findOne({_id: medic._id});
@@ -79,7 +79,7 @@ Template.groups.helpers({
 
 Template.groups.events({
 	'click #deletePatientFromMedic': function(event) {
-		var patientId = event.currentTarget.getAttribute("patientId");
+		var patientId = this._id;
 		Meteor.users.update({_id: Meteor.userId()}, {
 			$pull: {
 				'profile.patients': {
@@ -89,86 +89,99 @@ Template.groups.events({
 		});
 	},
 	'click #deletePatientFromGroup': function(event) {
-		var groupId = Router.current().getParams().hash;
-		var patientId = event.currentTarget.getAttribute("patientId");
-		Groups.update({_id: groupId}, {
-			$pull: {
-				patients: {
-					_id: patientId
+		if(true) { // TODO CHECK IF ADMIN
+			var groupId = Router.current().getParams()._id;
+			var patientId = this._id;
+			Groups.update({_id: groupId}, {
+				$pull: {
+					patients: {
+						_id: patientId
+					}
 				}
-			}
-		});
+			});
+		}
 	},
 	'click #deleteMedicFromGroup': function(event) {
-		// TODO CHECK IF A LEAST ONE MEDIC AND ADMIN
-		var groupId = Router.current().getParams().hash;
-		var medicId = event.currentTarget.getAttribute("medicId");
-		Groups.update({_id: groupId}, {
-			$pull: {
-				medics: {
-					_id: medicId
+		if(true) { // TODO CHECK IF ADMIN
+			var groupId = Router.current().getParams()._id;
+			var medicId = this._id;
+			Groups.update({_id: groupId}, {
+				$pull: {
+					medics: {
+						_id: medicId
+					}
 				}
-			}
-		});
+			});
+		}
 	},
 	'click #addPatient2group': function(event, template) {
-		var newFirstName = template.find('#addPatientFirstName2group').value;
-		var newLastName = template.find('#addPatientLastName2group').value;
-		var groupId = Router.current().getParams().hash;
-		Meteor.call('addPatient2group', newFirstName, newLastName, groupId, function(error) {
-			if(error) {
-				// TODO
-				console.log("error");
-				console.log(error);
-			}
-			else {
-				Meteor.subscribe("userData");
-				template.find('#addPatientFirstName2group').value = "";
-				template.find('#addPatientLastName2group').value = "";
-			}
-		});
+		if(this.admin) {
+			var newFirstName = template.find('#addPatientFirstName2group').value;
+			var newLastName = template.find('#addPatientLastName2group').value;
+			var groupId = this._id;
+			Meteor.call('addPatient2group', newFirstName, newLastName, groupId, function(error) {
+				if(error) {
+					// TODO
+					console.log("error");
+					console.log(error);
+				}
+				else {
+					Meteor.subscribe("userData");
+					template.find('#addPatientFirstName2group').value = "";
+					template.find('#addPatientLastName2group').value = "";
+				}
+			});
+		}
 	},
 	'click #addMedic2group': function(event, template) {
-		var newFirstName = template.find('#addMedicFirstName2group').value;
-		var newLastName = template.find('#addMedicLastName2group').value;
-		var groupId = Router.current().getParams().hash;
-		Meteor.call('addMedic2group', newFirstName, newLastName, groupId, function(error) {
-			if(error) {
-				// TODO
-				console.log("error");
-				console.log(error);
-			}
-			else {
-				Meteor.subscribe("userData");
-				template.find('#addMedicFirstName2group').value = "";
-				template.find('#addMedicLastName2group').value = "";
-			}
-		});
+		if(this.admin) {
+			var newFirstName = template.find('#addMedicFirstName2group').value;
+			var newLastName = template.find('#addMedicLastName2group').value;
+			var groupId = this._id;
+			Meteor.call('addMedic2group', newFirstName, newLastName, groupId, function(error) {
+				if(error) {
+					// TODO
+					console.log("error");
+					console.log(error);
+				}
+				else {
+					Meteor.subscribe("userData");
+					template.find('#addMedicFirstName2group').value = "";
+					template.find('#addMedicLastName2group').value = "";
+				}
+			});
+		}
 	},
 	'click #changeGroupName': function(event, template) {
-		var newName = template.find("#newGroupName").value;
-		var groupId = Router.current().getParams().hash;
-		Groups.update({_id: groupId}, {
-			$set: {
-				name: newName
-			}
-		});
+		if(this.admin) {
+			var newName = template.find("#newGroupName").value;
+			var groupId = this._id;
+			Groups.update({_id: groupId}, {
+				$set: {
+					name: newName
+				}
+			});
+		}
 	},
 	'click #deleteGroup1': function(event) {
-		$("#deleteGroup1").hide();
-		$("#deleteGroup2").show();
+		if(this.admin) {
+			$("#deleteGroup1").hide();
+			$("#deleteGroup2").show();
+		}
 	},
 	'click #deleteGroup2': function(event) {
-		var groupId = Router.current().getParams().hash;
-		Groups.remove({_id: groupId}, function(error) {
-			if(error) {
-				// TODO
-				;
-			}
-			else {
-				$('#groupDetailsModal').modal('hide');
-			}
-		});
+		if(this.admin) {
+			var groupId = this._id;
+			Groups.remove({_id: groupId}, function(error) {
+				if(error) {
+					// TODO
+					;
+				}
+				else {
+					$('#groupDetailsModal').modal('hide');
+				}
+			});
+		}
 	},
 	'click #addPatient': function(event) {
 		event.preventDefault();
@@ -224,19 +237,16 @@ Template.groups.events({
 				template.find('#groupName').value = "";
 			}
 		});
-	},
-	'click .newMessage': function(event) {
-		var receiverId = event.currentTarget.getAttribute("receiverId");
-		console.log("TODO: send message to "+receiverId);
 	}
 });
 
 Template.groups.onRendered(function() {
 	$('#groupDetailsModal').modal({
 		onHide: function() {
-			window.location.hash = "";
+			Router.go('/groups');
 			return true;
 		},
-		detachable: false
+		detachable: false,
+		allowMultiple: true
 	});
 });

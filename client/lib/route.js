@@ -5,8 +5,17 @@ AuthRouter = RouteController.extend({
 AppRouter = RouteController.extend({
 	layoutTemplate: 'layout',
 	loadingTemplate: 'loading',
+	subscriptions: function() {
+		this.subscribe('principals');
+		this.subscribe('groups');
+		this.subscribe('messages');
+		// etc
+	},
 	waitOn: function() {
-		return Meteor.subscribe("userData");
+		return [
+			Meteor.subscribe("userData"),
+			Meteor.subscribe("getOtherUsers")
+		];
 	},
 	onBeforeAction: function () {
 		var routeName = this.route.getName();
@@ -43,17 +52,29 @@ Router.route('/register', {
 	controller: 'AuthRouter'
 });
 
-Router.route('/passwordRecovery/:token', {
-	controller: 'AuthRouter'
+Router.route('/passwordRecovery/:token?', {
+	template: 'passwordRecovery',
+	controller: 'AuthRouter',
+	action: function() {
+		if(this.params.token)
+			this.render();
+		else
+			this.redirect("/login");
+	}
 });
 
-Router.route('home', {
+Router.route('/home', {
 	controller: 'AppRouter'
 });
-Router.route('data', {
+Router.route('/data/:userId?/:sequenceId?', {
+	template: 'data',
 	controller: 'AppRouter'
 });
-Router.route('groups', {
+Router.route('/groups/:_id?', {
+	template: 'groups',
+	controller: 'AppRouter'
+});
+Router.route('messages', {
 	controller: 'AppRouter'
 });
 Router.route('settings', {

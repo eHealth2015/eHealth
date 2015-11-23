@@ -28,6 +28,7 @@ Template.register.events({
 						// TODO SHOW ERROR
 						console.error(error);
 					} else {
+						EncryptionUtils.onSignIn(password1);
 						window.location.hash = 3;
 					}
 				});
