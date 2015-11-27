@@ -1,7 +1,62 @@
 <template name="dev">
 	<h1>Dev</h1>
 	{{#if isCordova}}
-	<h2>Tablet mode</h2>
-	{{/if}}
+		<h2>Mobile mode: {{type}}</h2>
+		<h5>Biometric state: {{state}}</h5>
 
+		{{#if isAndroid}}
+			<p>This code is only for Android</p>
+			<div class="ui grid row">
+				<button class="ui button blue" id="SamsungPass1">Check Samsung Pass Support</button>
+				<button class="ui button blue" id="SamsungPass2">Check For Registered Fingers</button>
+				<button class="ui button blue" id="SamsungPass3">Start Identify Dialog</button>
+			</div>
+			<br><br>
+			<p>Bluetooth:</p>
+			<div class="ui grid row">
+				<button class="ui button blue" id="isEnabled">isEnabled</button>
+				<button class="ui button blue" id="enable">Enable</button>
+				<button class="ui button blue" id="showSettings">Show settings</button>
+				<button class="ui button blue" id="list">List</button>
+				<button class="ui button blue" id="discover">Discover</button>
+			</div>
+			{{#if devices}}
+			<br><br><br>
+			<table class="ui striped table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Address</th>
+						<th>id</th>
+						<th>class</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each devices}}
+					<tr>
+						<td>{{name}}</td>
+						<td>{{address}}</td>
+						<td>{{id}}</td>
+						<td>{{class}}</td>
+						<td>
+							<button addr="{{address}}" class="ui tiny green basic button connect">
+								Connect
+							</button>
+							<button addr="{{address}}" style="display: none !important;" class="ui tiny red basic button disconnect">
+								Disconnect
+							</button>
+						</td>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+			{{/if}}
+		{{/if}}
+
+		{{#if isiOS}}
+			<button class="ui button blue" onclick="window.plugins.touchid.isAvailable(function(msg) {alert('ok: ' + msg)}, function(msg) {alert('not ok: ' + msg)})">Touch ID available?</button>
+			<button class="ui button blue" onclick="window.plugins.touchid.verifyFingerprint('Scan your fingerprint please', function(msg) {alert('ok: ' + msg)}, function(msg) {alert('not ok: ' + JSON.stringify(msg))})">Scan fingerprint</button>
+		{{/if}}
+	{{/if}}
 </template>

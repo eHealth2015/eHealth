@@ -63,7 +63,9 @@ Template.groups.helpers({
 					}
 					return patient;
 				});
-				Meteor.setTimeout(function() {$('#groupDetailsModal').modal('show')}, 0);
+				Meteor.setTimeout(function() {
+					$('#groupDetailsModal').modal('show');
+				}, 0);
 				return group;
 			}
 			else
@@ -187,11 +189,13 @@ Template.groups.events({
 		event.preventDefault();
 		$('.adding-patient').show(500);
 		$('#addPatient').fadeOut(500);
+		$('#addPatientFirstName').focus();
 	},
 	'click #addGroup': function(event) {
 		event.preventDefault();
 		$('.adding-group').show(500);
 		$('#addGroup').fadeOut(500);
+		$('#groupName').focus();
 	},
 	'click #cancelAddPatient': function(event) {
 		event.preventDefault();
@@ -247,6 +251,7 @@ Template.groups.onRendered(function() {
 			return true;
 		},
 		detachable: false,
-		allowMultiple: true
+		allowMultiple: true,
+		autofocus: false
 	});
 });

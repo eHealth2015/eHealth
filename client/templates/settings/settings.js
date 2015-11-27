@@ -55,6 +55,7 @@ Template.settings.onRendered(function() {
 	});
 	$('#modalDelete').modal({
 		detachable: false,
+		autofocus: false,
 		onApprove: function() {
 			Meteor.call('deleteUser');
 			Router.go('/login');

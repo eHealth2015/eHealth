@@ -2,6 +2,8 @@ Accounts.onResetPasswordLink(function(token) {
 	Router.go('/passwordRecovery/'+token);
 });
 
+Session.setDefault('state', 'locked');
+
 Session.setDefault('whoIsActive', {
 	'home': "active",
 	'data': "",
@@ -45,6 +47,20 @@ Template.registerHelper('isUserUnset', function() {
 
 Template.registerHelper('isCordova', function() {
 	return Meteor.isCordova;
+});
+
+Template.registerHelper('isAndroid', function() {
+	if(Meteor.isCordova)
+		return device.platform === "Android";
+	emse
+		return false;
+});
+
+Template.registerHelper('isiOS', function() {
+	if(Meteor.isCordova)
+		return device.platform === "iOS";
+	emse
+		return false;
 });
 
 EncryptionUtils.configure({

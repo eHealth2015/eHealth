@@ -5,6 +5,9 @@ Template.layout.events({
 });
 
 Template.layout.helpers({
+	nbMessages: function() {
+		return Messages.find().count();
+	},
 	whoIsActive: function() {
 		return Session.get('whoIsActive');
 	},
@@ -16,7 +19,7 @@ Template.layout.helpers({
 			return {
 				firstName: user.profile.firstName,
 				lastName: user.profile.lastName
-			}
+			};
 		}
 		else
 			return null;
