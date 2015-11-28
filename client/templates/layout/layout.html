@@ -1,65 +1,65 @@
 <template name="layout">
 	{{#if currentUser}}
-	<div class="sidebar">
-		<ul class="menu">
+	<div class="ui inverted labeled icon left inline vertical sidebar menu">
+		<a class="item {{whoIsActive.home}}" alt="Home" href="/home">
+			<i class="home icon"></i>
+			Home
+		</a>
 
-			<li class="{{whoIsActive.home}}">
-				<a href="/home" alt="Home">
-					<i class="home icon icon"></i>
-				</a>
-			</li>
+		<a class="item {{whoIsActive.data}}" href="/data" alt="Data">
+			<i class="area chart icon"></i>
+			Data
+		</a>
 
-			<li class="{{whoIsActive.data}}">
-				<a href="/data" alt="Data">
-					<i class="area chart icon"></i>
-				</a>
-			</li>
+		{{#if isUserMedic}}
+		<a class="item {{whoIsActive.groups}}" href="/groups" alt="Groups and patients">
+			<i class="users icon"></i>
+			Patients
+		</a>
+		{{/if}}
 
-			{{#if isUserMedic}}
-			<li class="{{whoIsActive.groups}}">
-				<a href="/groups" alt="Groups and patients">
-					<i class="users icon"></i>
-				</a>
-			</li>
-			{{/if}}
+		{{#if isUserPatient}}
+		<a class="item {{whoIsActive.groups}}" href="/groups" alt="Medical follow">
+			<i class="doctor icon"></i>
+			Medical follow
+		</a>
+		{{/if}}
 
-			{{#if isUserPatient}}
-			<li class="{{whoIsActive.groups}}">
-				<a href="/groups" alt="Medical follow">
-					<i class="doctor icon"></i>
-				</a>
-			</li>
-			{{/if}}
+		<a class="item {{whoIsActive.messages}}" href="/messages" alt="Messages">
+			<i class="mail icon"></i>
+			<span>Messages ({{nbMessages}})</span>
+		</a>
 
-			<li class="{{whoIsActive.messages}}">
-				<a href="/messages" alt="Messages">
-					<i class="mail icon"></i>
-					<div class="floating ui red circular label">{{nbMessages}}</div>
-				</a>
-			</li>
+		<a class="item {{whoIsActive.settings}}" href="/settings" alt="Settings">
+			<i class="cogs icon"></i>
+			Settings
+		</a>
 
-			<li class="{{whoIsActive.settings}}">
-				<a href="/settings" alt="Settings">
-					<i class="cogs icon"></i>
-				</a>
-			</li>
+		<a class="item logout" href="/login" alt="Logout">
+			<i class="sign out icon"></i>
+			Logout
+		</a>
 
-			<li>
-				<a href="/login" class="logout" alt="Logout">
-					<i class="sign out icon"></i>
-				</a>
-			</li>
+		<!-- DEV -->
+		<a class="item" href="/dev" alt="Dev">
+			<i class="codepen icon"></i>
+			Developer
+		</a>
 
-			<!-- DEV -->
-			<li>
-				<a href="/dev" class="dev" alt="Dev">
-					<i class="codepen icon"></i>
-				</a>
-			</li>
-		</ul>
 	</div>
-	<div class="mainContent">
+	<div class="pusher">
+		<div class="ui top inverted fixed show menu">
+			<div class="ui container">
+				<a class="item">
+					<i class="sidebar icon"></i>
+					Menu
+				</a>
+				<div class="right menu">Log out</div>
+			</div>
+		</div>
+		<div class="mainContent">
 		{{> yield}}
+		</div>
 	</div>
 	{{else}}
 	{{> yield}}

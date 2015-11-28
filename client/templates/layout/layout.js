@@ -1,6 +1,9 @@
 Template.layout.events({
 	'click .logout': function(event) {
 		Accounts.logout();
+	},
+	'click .show.menu': function(event) {
+		$('.ui.sidebar').sidebar('toggle');
 	}
 });
 
