@@ -123,6 +123,10 @@ table thead th {
 	padding-bottom: 4em;
 }
 
+.sidebar .item {
+	padding: 1.5em 1em !important;
+}
+
 .sidebar .item.active, .sidebar .item.active:hover {
 	background: #04aab6 !important;
 }
@@ -226,7 +230,7 @@ label > .label-body {
 	}
 
 	.mainContent {
-		padding: 2em 3em 2em 170px;
+		padding: 2em 3em 2em 11em;
 	}
 
 	.show.menu {
