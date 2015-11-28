@@ -29,7 +29,7 @@ Template.register.events({
 						console.error(error);
 					} else {
 						EncryptionUtils.onSignIn(password1);
-						window.location.hash = 3;
+						updateLocationHash(3);
 					}
 				});
 			}
@@ -39,20 +39,20 @@ Template.register.events({
 			}
 		}
 		else {
-			window.location.hash = 1;
+			updateLocationHash(1);
 		}
 	},
 	'click #patient': function() {
 		Session.set('newuser', {
 			type: "Patient"
 		});
-		window.location.hash = 2;
+		updateLocationHash(2);
 	},
 	'click #medic': function() {
 		Session.set('newuser', {
 			type: "Medic"
 		});
-		window.location.hash = 2;
+		updateLocationHash(2);
 	}
 });
 
@@ -92,15 +92,22 @@ Template.register.helpers({
 	},
 	'newuser': function(type) {
 		var newuser = Session.get('newuser');
-		if(newuser && newuser.type)
+		if (newuser && newuser.type)
 			return newuser.type === type;
-		else
-			window.location.hash = 1;
+		else {
+			updateLocationHash(1);
 		}
+	}
 });
 
 Template.register.onRendered(function() {
 	$('select.dropdown').dropdown();
-	if(window.location.hash === "#3" && !Meteor.userId())
-		window.location.hash = 1;
+	if(window.location.hash === "#3" && !Meteor.userId()) {
+		updateLocationHash(1);
+	}
 });
+
+function updateLocationHash(number) {
+	Session.set('hash', '#' + number);
+	window.location.hash = number;
+}
