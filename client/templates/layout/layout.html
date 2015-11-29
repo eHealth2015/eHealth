@@ -47,23 +47,29 @@
 		</a>
 
 	</div>
+
 	<div class="pusher">
 		<div class="ui top inverted fixed show menu">
 			<div class="ui container">
-				<a class="item">
+				<a class="item show-menu">
 					<i class="sidebar icon"></i>
 					Menu
 				</a>
-				<div class="right menu">Log out</div>
+				<div class="right menu">
+					<a class="item" alt="Messages" href="/messages">
+						Messages
+						<a class="ui red circular label">{{nbMessages}}</a>
+					</a>
+				</div>
 			</div>
 		</div>
 		<div class="mainContent">
 		{{> yield}}
 		</div>
 	</div>
+
 	{{else}}
 	{{> yield}}
 	{{/if}}
-
 	{{> sendMessageModal receiver}}
 </template>

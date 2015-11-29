@@ -1,3 +1,7 @@
+html.ios, html.ios body {
+	height: 100%!important;
+}
+
 html, body, h1, h2, h3, h4, h5 {
 	font-family: 'Open Sans', sans-serif !important;
 	font-weight: 400;
@@ -19,26 +23,35 @@ h5 {
 }
 
 .mainContent {
-	padding:4em 2em;
+	padding:5em 2em 0 2em;
 }
 
-.authentication {
+.ui.container.authentication {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	-ms-transform: translateX(-50%) translateY(-50%);
 	-webkit-transform: translate(-50%,-50%);
 	transform: translate(-50%,-50%);
+	padding: 0 2em;
+	max-width: 760px !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	width: 100% !important;
 }
 
 .authentication input, label {
 	text-align: center !important;
+	margin-bottom: .5em;
+}
+
+.authentication .fluid.input {
+	margin-top: .5em;
 }
 
 .authentication input[type="submit"] {
 	display: block;
 	margin: 1em auto;
-	width: 50%;
 	max-width: 400px;
 	background: #04aab6 !important;
 	border-color: #04aab6 !important;
@@ -225,8 +238,8 @@ label > .label-body {
 
 @media all and (min-width: 768px) {
 	.pusher {
-		-webkit-transform: none !important;
-		transform: none !important;
+		-webkit-transform: translate3d(0, 0, 0) !important;
+		transform: translate3d(0, 0, 0) !important;
 	}
 
 	.mainContent {
@@ -238,8 +251,8 @@ label > .label-body {
 	}
 
     .sidebar.menu {
-	    -webkit-transform: none !important;
-	    transform: none !important;
+	    -webkit-transform: translate3d(0, 0, 0) !important;
+	    transform: translate3d(0, 0, 0) !important;
 	    visibility: visible;
     }
 }

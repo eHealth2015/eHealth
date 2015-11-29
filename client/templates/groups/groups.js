@@ -246,9 +246,15 @@ Template.groups.events({
 
 Template.groups.onRendered(function() {
 	$('#groupDetailsModal').modal({
-		onHide: function() {
+		onHidden: function() {
+			$('body').removeAttr('style');
 			Router.go('/groups');
 			return true;
+		},
+		onVisible: function() {
+			$("body").css({
+				'min-height': $('#groupDetailsModal').height() + 100
+			});
 		},
 		detachable: false,
 		allowMultiple: true,

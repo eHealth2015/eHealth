@@ -1,8 +1,9 @@
 Template.layout.events({
 	'click .logout': function(event) {
 		Accounts.logout();
+		$("body").removeAttr("class");
 	},
-	'click .show.menu': function(event) {
+	'click .show-menu': function(event) {
 		$('.ui.sidebar').sidebar('toggle');
 	}
 });
