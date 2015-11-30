@@ -5,6 +5,9 @@ Template.layout.events({
 	},
 	'click .show-menu': function(event) {
 		$('.ui.sidebar').sidebar('toggle');
+	},
+	'click .sidebar.menu .item': function(event) {
+		$('.ui.sidebar').sidebar('hide');
 	}
 });
 
