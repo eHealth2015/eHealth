@@ -12,15 +12,23 @@
 				<button class="ui button blue" id="SamsungPass3">Start Identify Dialog</button>
 			</div>
 			<br><br>
-			<p>Bluetooth:</p>
-			<div class="ui grid row">
-				<button class="ui button blue" id="isEnabled">isEnabled</button>
-				<button class="ui button blue" id="enable">Enable</button>
-				<button class="ui button blue" id="showSettings">Show settings</button>
-				<button class="ui button blue" id="list">List</button>
-				<button class="ui button blue" id="discover">Discover</button>
-			</div>
-			{{#if devices}}
+		{{/if}}
+		{{#if isiOS}}
+			<button class="ui button blue" onclick="window.plugins.touchid.isAvailable(function(msg) {alert('OK: ' + msg)}, function(msg) {alert('ERROR: ' + msg)})">Touch ID available?</button>
+			<br><br>
+			<button class="ui button blue" onclick="window.plugins.touchid.verifyFingerprint('Scan your fingerprint please', function(msg) {Session.set('state', 'unlocked');}, function(msg) {alert('ERROR: ' + JSON.stringify(msg))})">Scan fingerprint</button>
+		{{/if}}
+
+		<p>All plateform</p><br>
+		<p>Bluetooth:</p>
+		<div class="ui grid row">
+			<button class="ui button blue" id="isEnabled">isEnabled</button>
+			<button class="ui button blue" id="enable">Enable</button>
+			<button class="ui button blue" id="showSettings">Show settings</button>
+			<button class="ui button blue" id="list">List</button>
+			<button class="ui button blue" id="discover">Discover</button>
+		</div>
+		{{#if devices}}
 			<br><br><br>
 			<table class="ui striped table">
 				<thead>
@@ -51,12 +59,7 @@
 					{{/each}}
 				</tbody>
 			</table>
-			{{/if}}
 		{{/if}}
-
-		{{#if isiOS}}
-			<button class="ui button blue" onclick="window.plugins.touchid.isAvailable(function(msg) {alert('ok: ' + msg)}, function(msg) {alert('not ok: ' + msg)})">Touch ID available?</button>
-			<button class="ui button blue" onclick="window.plugins.touchid.verifyFingerprint('Scan your fingerprint please', function(msg) {alert('ok: ' + msg)}, function(msg) {alert('not ok: ' + JSON.stringify(msg))})">Scan fingerprint</button>
-		{{/if}}
+		<p>{{log}}</p>
 	{{/if}}
 </template>

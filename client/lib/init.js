@@ -10,6 +10,7 @@ Session.setDefault('whoIsActive', {
 	'groups': "",
 	'messages': "",
 	'settings': "",
+	"dev": ""
 });
 
 setActive = function(name) {
@@ -19,6 +20,7 @@ setActive = function(name) {
 		'groups': "",
 		'messages': "",
 		'settings': "",
+		"dev": ""
 	};
 	obj[name] = "active";
 	Session.set('whoIsActive', obj);

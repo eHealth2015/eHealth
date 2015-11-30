@@ -1,8 +1,12 @@
 Template.dev.onRendered(function() {
+	setActive("settings");
 	Session.set('devices', []);
 });
 
 Template.dev.helpers({
+	log: function() {
+		return Session.get('log');
+	},
 	type: function() {
 		return device.platform;
 	},
@@ -23,6 +27,12 @@ Template.dev.events({
 			console.log("connect ok");
 			$(connect).hide();
 			$(disconnect).show();
+			bluetoothSerial.subscribe('\n', function (data) {
+				console.log(data);
+				Session.set('log', data);
+			}, function(err) {
+				console.log(err);
+			});
 		}, function(msg) {
 			console.log("fail to connect");
 			console.log(msg);
