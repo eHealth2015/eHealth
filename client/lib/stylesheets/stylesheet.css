@@ -238,8 +238,8 @@ label > .label-body {
 
 @media all and (min-width: 768px) {
 	.pusher {
-		-webkit-transform: translate3d(0, 0, 0) !important;
-		transform: translate3d(0, 0, 0) !important;
+		-webkit-transform: none !important;
+		transform: none !important;
 	}
 
 	.mainContent {
