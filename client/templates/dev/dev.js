@@ -1,5 +1,5 @@
 Template.dev.onRendered(function() {
-	setActive("settings");
+	setActive("dev");
 	Session.set('devices', []);
 });
 

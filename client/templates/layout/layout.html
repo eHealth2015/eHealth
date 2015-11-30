@@ -40,12 +40,24 @@
 			Logout
 		</a>
 
+		<!-- Connect icons -->
+		<!-- QUAND CE SERA BON, A N'AFFICHER QUE EN VERSION MOBILE CORDOVA -->
+		<div id="connection" class="item">
+			<a href="#" id="bt">
+				<i>
+					<img class="{{color.bluetooth}}" style="width: 1.65rem;" src="/bluetooth_white.svg">
+				</i>
+				<div class="ui {{btTry2connect}} loader"></div>
+			</a>
+			<br><br>
+			<i id="wifiIcon" class="wifi icon {{color.wifi}}"></i>
+		</div>
+		
 		<!-- DEV -->
-		<a class="item" href="/dev" alt="Dev">
+		<a style="bottom: 0px; position: absolute; left: 8%;" class="item {{whoIsActive.dev}}" href="/dev" alt="Dev">
 			<i class="codepen icon"></i>
 			Developer
 		</a>
-
 	</div>
 
 	<div class="pusher">
