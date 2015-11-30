@@ -18,15 +18,17 @@
 			<br><br>
 			<button class="ui button blue" onclick="window.plugins.touchid.verifyFingerprint('Scan your fingerprint please', function(msg) {Session.set('state', 'unlocked');}, function(msg) {alert('ERROR: ' + JSON.stringify(msg))})">Scan fingerprint</button>
 		{{/if}}
-
-		<p>All plateform</p><br>
+		<br><br>
+		<p>All plateform</p>
 		<p>Bluetooth:</p>
 		<div class="ui grid row">
 			<button class="ui button blue" id="isEnabled">isEnabled</button>
+			<button class="ui button blue" id="list">List</button>
+			{{#unless isiOS}}
 			<button class="ui button blue" id="enable">Enable</button>
 			<button class="ui button blue" id="showSettings">Show settings</button>
-			<button class="ui button blue" id="list">List</button>
 			<button class="ui button blue" id="discover">Discover</button>
+			{{/unless}}
 		</div>
 		{{#if devices}}
 			<br><br><br>
@@ -60,6 +62,7 @@
 				</tbody>
 			</table>
 		{{/if}}
+		<br><br>
 		<p>{{log}}</p>
 	{{/if}}
 </template>
