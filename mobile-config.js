@@ -6,3 +6,5 @@ App.info({
 	email: 'gatux94@gmail.com',
 	website: 'http://ehealth.gatux.fr'
 });
+
+App.accessRule('*');

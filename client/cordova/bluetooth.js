@@ -70,3 +70,11 @@ bluetooth.disconnect = function() {
 		console.log("disconnect failed")
 	});
 };
+
+bluetooth.send = function(data) {
+	bluetoothSerial.write(data, function() {
+		console.log("BT write OK");
+	}, function() {
+		console.error("BT write error");
+	});
+};
