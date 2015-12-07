@@ -1,3 +1,5 @@
+ARDUINO_BLUETOOTH_MAC_ADDR
+
 Session.setDefault('bt', {connected: false, trying: false});
 
 bluetooth = {
@@ -35,9 +37,10 @@ bluetooth.try2connect = function() {
 };
 
 bluetooth.subscribe = function() {
-	bluetoothSerial.subscribe('\n', function (data) {
+	bluetoothSerial.subscribe(';', function (data) {
 		console.log(data);
 		// TODO SOMETHING WITH DATA
+		newData(data);
 	}, function() {
 		console.log("ERROR DATA IN SUBCRIBE");
 	});

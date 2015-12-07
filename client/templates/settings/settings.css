@@ -1,3 +1,7 @@
 #editform {
 	padding: 2rem;
 }
+
+h4.ui.header {
+	margin-top: 0;
+}

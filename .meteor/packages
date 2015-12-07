@@ -22,6 +22,4 @@ msavin:mongol
 utilities:spin
 semantic:ui
 flemay:less-autoprefixer
-semantic:ui-dropdown
-semantic:ui-modal
 planifica:encryption

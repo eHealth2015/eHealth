@@ -1,49 +1,83 @@
 <template name="settings">
 	<h1>Settings</h1>
-	<div class="ui grid">
-		<div class="ui fluid card">
-			<a id="settings" class="ui right corner label">
-				<i class="cogs icon"></i>
-			</a>
-			<div class="content">
-				<div class="description">
-					<div class="ui list">
-						<div class="item">
-							<i class="user icon"></i>
-							<div class="content">
-								{{profile.firstName}} {{profile.lastName}}
-							</div>
+	<div class="small-spacing"></div>
+
+	<div class="ui stackable grid">
+
+		<div class="five wide column">
+			
+			<!-- Account settings - for all -->
+			<div class="ui segment">
+				
+				<h4 class="ui header">Your account</h4>
+				<a id="settings" class="ui right corner label">
+					<i class="cogs icon"></i>
+				</a>
+
+				<div class="ui list">
+					<div class="item">
+						<i class="user icon"></i>
+						<div class="content">
+							{{profile.firstName}} {{profile.lastName}}
 						</div>
-						<div class="item">
-							<i class="chevron right icon"></i>
-							<div class="content">
-								{{#if isUserMedic}}
-								{{profile.title}}
-								{{else}}
-								Patient
-								{{/if}}
-							</div>
+					</div>
+					<div class="item">
+						<i class="chevron right icon"></i>
+						<div class="content">
+							{{#if isUserMedic}}
+							{{profile.title}}
+							{{else}}
+							Patient
+							{{/if}}
 						</div>
-						{{#if isUserPatient}}
-						<div class="item">
-							<i class="venus mars icon"></i>
-							<div class="content">
-								{{profile.gender}}
-							</div>
+					</div>
+					{{#if isUserPatient}}
+					<div class="item">
+						<i class="venus mars icon"></i>
+						<div class="content">
+							{{profile.gender}}
 						</div>
-						{{/if}}
-						<div class="item">
-							<i class="mail icon"></i>
-							<div class="content">
-								<a href="mailto:jack@semantic-ui.com">{{email.address}}</a>
-							</div>
+					</div>
+					{{/if}}
+					<div class="item">
+						<i class="mail icon"></i>
+						<div class="content">
+							<a href="mailto:jack@semantic-ui.com">{{email.address}}</a>
 						</div>
 					</div>
 				</div>
 			</div>
+			<!-- end of Account settings - for all -->
+
 		</div>
-		<button id="delete" class="ui red button">Delete account</button>
+		<div class="five wide column">
+
+			<!-- Local storage - tablet only -->
+			<!-- {{#if isCordova}} -->
+			<div class="ui segment">
+				<h4 class="ui header">Local storage</h4>
+				<div class="ui progress" id="test">
+					<div class="bar">
+					<div class="progress"></div>
+					</div>
+					<div class="label">Uploading Files</div>
+				</div>
+			</div>
+			<!-- {{/if}} -->
+
+		</div>
 	</div>
+
+<div class="ui grid">
+  <div class="six wide tablet eight wide computer column">
+  	<div class="ui segment">{{profile.firstName}}
+  	</div>
+  </div>
+  <div class="six wide tablet eight wide computer column">
+  	<div class="ui segment">TEST2</div>
+  </div>
+</div>
+
 	<div id="modalEdit" class="ui modal">
 		<i class="close icon"></i>
 		<div class="header">

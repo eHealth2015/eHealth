@@ -82,8 +82,6 @@ robertlowe:persistent-reactive-dict@0.1.2
 routepolicy@1.0.6
 semantic:ui@2.1.5
 semantic:ui-data@2.1.5
-semantic:ui-dropdown@2.1.6
-semantic:ui-modal@2.1.6
 service-configuration@1.0.5
 session@1.1.1
 sha@1.0.4
