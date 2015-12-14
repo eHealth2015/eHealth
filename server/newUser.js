@@ -4,6 +4,8 @@ Accounts.onCreateUser(function(options, user) {
 		if(user.profile.type === "Medic") {
 			user.patients = [];
 		}
+		else
+			user.sequences = [];
 		return user;
 	}
 	else

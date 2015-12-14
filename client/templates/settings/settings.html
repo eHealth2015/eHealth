@@ -55,8 +55,13 @@
 			<!-- Local storage - tablet only -->
 			<!-- {{#if isCordova}} -->
 			<div class="ui segment">
+			
 				<h4 class="ui header">Local storage</h4>
-				<div class="ui progress" id="test">
+				<a id="settings" class="ui right corner label">
+					<i class="cogs icon"></i>
+				</a>
+
+				<div class="ui progress" id="progressStorage">
 					<div class="bar">
 					<div class="progress"></div>
 					</div>
@@ -68,6 +73,7 @@
 		</div>
 	</div>
 
+<!-- DEV DEV -->
 <div class="ui grid">
   <div class="six wide tablet eight wide computer column">
   	<div class="ui segment">{{profile.firstName}}
@@ -76,6 +82,7 @@
   <div class="six wide tablet eight wide computer column">
   	<div class="ui segment">TEST2</div>
   </div>
+
 </div>
 
 	<div id="modalEdit" class="ui modal">

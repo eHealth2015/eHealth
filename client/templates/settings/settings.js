@@ -62,4 +62,10 @@ Template.settings.onRendered(function() {
 			return true;
 		}
 	});
+	//if(Meteor.isCordova) {
+		$("#progressStorage").progress({
+			showActivity: false,  
+			percent: 50 // TODO
+		});
+	//}
 });

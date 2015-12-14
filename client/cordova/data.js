@@ -5,6 +5,6 @@ newData = function(data) {
 	// type = ...
 	// timestamp = ...
 
-	switch(type)
+	
 
 };

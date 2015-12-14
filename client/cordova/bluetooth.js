@@ -1,4 +1,4 @@
-ARDUINO_BLUETOOTH_MAC_ADDR
+ARDUINO_BLUETOOTH_MAC_ADDR = "48:C1:AC:F9:4A:93";
 
 Session.setDefault('bt', {connected: false, trying: false});
 
@@ -12,7 +12,7 @@ bluetooth.try2connect = function() {
 		console.log("realy start try to connect");
 		Session.set('bt', {connected: false, trying: true});
 		bluetoothSerial.connect(
-			"48:C1:AC:F9:4A:93",
+			ARDUINO_BLUETOOTH_MAC_ADDR,
 			function() {
 				// TODO SHOW SUCCESS MSG WITH NAME?
 				console.log("CONNECT SUCCESS");
