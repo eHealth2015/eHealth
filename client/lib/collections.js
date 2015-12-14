@@ -13,3 +13,5 @@ MessagesEncryption = new CollectionEncryption(
 		}
 	}
 );
+
+Datas = new Mongo.Collection('datas');

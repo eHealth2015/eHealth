@@ -12,6 +12,10 @@ html, body {
 	color: #444;
 }
 
+body.pushable > .pusher {
+	background: #eee !important;
+}
+
 h3 {
 	color: #04aab6;
 	font-weight: 600;
