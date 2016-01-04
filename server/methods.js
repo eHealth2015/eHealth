@@ -49,6 +49,7 @@ Meteor.methods({
 		else
 			throw new Meteor.Error("user-unknown", "Can't find the user");
 	},
+
 	'deleteUser': function() {
 		console.log("delete user");
 		var array = isUserMedic() ? "medics" : "patients";
@@ -65,5 +66,19 @@ Meteor.methods({
 			else
 				console.log("Delete user ok");
 		});
+	},
+
+	'invite': function(emailAddr, type) {
+		// CHECK IF AUTHORISED
+		var code = Code.insert({
+			createDate: new Date(),
+			userIdFrom: this.userId,
+			userIdTo: null,
+			acceptDate: null,
+			type: type
+		});
+		console.log("New code: ");
+		console.log(code);
+		console.log("TODO SEND EMAIL");
 	}
 });

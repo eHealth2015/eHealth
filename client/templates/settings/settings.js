@@ -58,14 +58,9 @@ Template.settings.onRendered(function() {
 		autofocus: false,
 		onApprove: function() {
 			Meteor.call('deleteUser');
+			Accounts.logout();
 			Router.go('/login');
 			return true;
 		}
 	});
-	//if(Meteor.isCordova) {
-		$("#progressStorage").progress({
-			showActivity: false,  
-			percent: 50 // TODO
-		});
-	//}
 });

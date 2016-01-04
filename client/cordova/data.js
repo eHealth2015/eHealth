@@ -1,97 +1,107 @@
 newData = function(data) {
 
-	/* data = ":F|timestamp|seqId|H,xx.xx|I,xx.xx;" */
+	/*  TEST DATA:
+		"E|1234|1|H,21.2"
+		"F|1500|1|H,39.7|J,1.09|K,99.009"
+		"G|900|2|I,1"
+		"F|timestamp|seqId|H,xx.xx|I,xx.xx"
+	*/
 
-	if (data.charAt(0) != ":")
-		return;
-
-	var type = data.charAt(1);
+	var type = data.charAt(0);
 	var dataTab = data.split("|");
+	var timestamp = getTimestamp(dataTab);
+	var payload = getPayload(dataTab);
 
 	switch(type) {
-
-		case "A":
-			A();
-			break;
 
 		case "E":
 			E(dataTab);
 			break;
 
 		case "F":
-			F(dataTab);
+			saveData(dataTab);
 			break;
 
 		case "G":
+			saveData(dataTab);
 			break;
 
 		default:
 			break;
-
-	}
-
-	/*//data.substring() pour enlever potentiellement les ':' et le ';'
-	// on considère qu'ils y sont, peut etre chercher leur position, sinon c'est le 1 et le dernier OK?
-	var dataTab = data.split('|');
-	var timestamp = dataTab[1];
-
-	switch(type) {
-		default:
-			break;
-	}*/
-
-	function A() {
-		// si A -> envoie A avec timestamp
-		if (type == "A") {
-			bluetooth.send(new Date().getTime());
-			return;
-		}
 	}
 
 	function E(dataTab) {
-		var timestamp = getTimestamp(dataTab);
-		var payload = getPayload(dataTab);
 		var seqId = getSeqId(dataTab);
 
-		// TODO
+		var dataDbElement = Datas.findOne({
+			seqId: seqId
+		});
+
+		var alerts = payload.map(function(e) {
+			return [timestamp, convertLetterToSensor(getData(e)[0])];
+		})
+
+		if(dataDbElement) {
+			var tStart = timestamp < dataDbElement.tStart ? timestamp : dataDbElement.tStart;
+			var tEnd = timestamp > dataDbElement.tStart ? timestamp : dataDbElement.tEnd;
+			for (var i = 0; i < payload.length; i++) {
+				updateData(dataDbElement._id, {
+					$addToSet: {alerts: {$each: alerts}},
+					$set: {
+						tStart: tStart,
+						tEnd: tEnd
+					}
+				});
+			}}
+		else
+			insertData({
+				seqId: seqId,
+				tStart: timestamp,
+				tEnd: timestamp,
+				alerts: alerts,
+				data: {}
+			});
 	}
 
-	function F(dataTab) {
-		var timestamp = getTimestamp(dataTab);
-		var payload = getPayload(dataTab);
+	function saveData(dataTab) {
 		var seqId = getSeqId(dataTab);
-		var data = {
-			seqId: seqId,
-			sensors: []
-		};
+		
+		var dataDbElement = Datas.findOne({
+			seqId: seqId
+		});
 
-		for (var i = 0; i < payload.length; i++) {
+		if(dataDbElement) {
+			var tStart = timestamp < dataDbElement.tStart ? timestamp : dataDbElement.tStart;
+			var tEnd = timestamp > dataDbElement.tStart ? timestamp : dataDbElement.tEnd;
 
-			var unitPayload = payload[i];
-			var infos = unitPayload.split(",");
-			var sensor = infos[0];
-			var sensorData = {
-				x: timestamp,
-				y: infos[1]
-			};
-
-			data.sensors.push({
-				sensor: sensor,
-				data: sensorData
+			var updateDataObj = {};
+			for (var i = 0; i < payload.length; i++) {
+				var detailData = getData(payload[i]);
+				var propName = 'data.'+convertLetterToSensor(detailData[0]);
+				updateDataObj[propName] = {x: timestamp, y: detailData[1]};
+			}
+			updateData(dataDbElement._id, {
+				$addToSet: updateDataObj,
+				$set: {
+					tStart: tStart,
+					tEnd: tEnd
+				}
 			});
 		}
-
-		Datas.insert(data, function(error, result) {
-			if (error)
-				console.error(error);
-			else {
-				Meteor.users().update({
-					_id: Meteor.userId()
-				}, {
-					$addToSet: {sequences: result}
-				});
+		else {
+			var data = {};
+			for (var i = 0; i < payload.length; i++) {
+				var detailData = getData(payload[i]);
+				data[convertLetterToSensor(detailData[0])] = [{x: timestamp, y: detailData[1]}];
 			}
-		});
+			insertData({
+				seqId: seqId,
+				tStart: timestamp,
+				tEnd: timestamp,
+				alerts: [],
+				data: data
+			});
+		}
 	}
 
 	function getTimestamp(dataTab) {
@@ -104,5 +114,54 @@ newData = function(data) {
 
 	function getPayload(dataTab) {
 		return dataTab.slice(3);
+	}
+
+	function getData(dataTabElement) {
+		return dataTabElement.split(',');
+	}
+
+	function insertData(doc) {
+		Datas.insert(doc, function(err, id) {
+			if(err) {
+				console.log("ERROR INSERTING NEW DATA ELEMENT");
+				console.log(doc);
+				console.log(err);
+			}
+			else {
+				addSequence(id, doc.tStart, doc.tEnd);
+			}
+		});
+
+	}
+
+	function updateData(id, doc) {
+		Datas.update(id, doc);
+	}
+
+	function addSequence(id) {
+		Sequences.insert({
+			userId: Meteor.userId(),
+			dataId: id
+		});
+	}
+
+	function convertLetterToSensor(letter) {
+		switch(letter) {
+			case 'H':
+				return 'Airflow';
+			break;
+			case 'I':
+				return 'HeartBeats';
+			break;
+			case 'J':
+				return 'Oxymetry';
+			break;
+			case 'K':
+				return 'Temperature';
+			break;
+			case 'L':
+				return 'Conductance';
+			break;
+		}
 	}
 };

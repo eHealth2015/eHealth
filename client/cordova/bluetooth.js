@@ -1,4 +1,4 @@
-ARDUINO_BLUETOOTH_MAC_ADDR = "48:C1:AC:F9:4A:93";
+ARDUINO_BLUETOOTH_MAC_ADDR = "20:13:12:12:90:3A";
 
 Session.setDefault('bt', {connected: false, trying: false});
 
@@ -18,11 +18,12 @@ bluetooth.try2connect = function() {
 				console.log("CONNECT SUCCESS");
 				bluetooth.subscribe();
 				bluetooth.check();
+				bluetooth.send('A|'+ new Date().getTime());
 			},
 			function() {
 				// TODO SHOW ERR MSG
 				console.log("FAIL TO CONNECT");
-				if(++bluetooth.fail2connect < 10)
+				if(++bluetooth.fail2connect < 2)
 					Meteor.setTimeout(function() {
 						Session.set('bt', {connected: false, trying: false});
 						bluetooth.try2connect();
@@ -37,9 +38,9 @@ bluetooth.try2connect = function() {
 };
 
 bluetooth.subscribe = function() {
-	bluetoothSerial.subscribe(';', function (data) {
-		console.log(data);
-		// TODO SOMETHING WITH DATA
+	bluetoothSerial.subscribe('\n', function (rawdata) {
+		var data = rawdata.substr(0, rawdata.length-1);
+		console.log("New message from bluetooth: "+data);
 		newData(data);
 	}, function() {
 		console.log("ERROR DATA IN SUBCRIBE");
@@ -64,7 +65,7 @@ bluetooth.disconnect = function() {
 		Meteor.clearInterval(this.handleCheck);
 
 	bluetoothSerial.disconnect(function() {
-		console.log("disconnect succed");
+		console.log("disconnect succeed");
 		Session.set('bt', {connected: false, trying: false});
 	}, function() {
 		console.log("disconnect failed")
@@ -72,7 +73,8 @@ bluetooth.disconnect = function() {
 };
 
 bluetooth.send = function(data) {
-	bluetoothSerial.write(data, function() {
+	console.log("Message: " + data);
+	bluetoothSerial.write(data+'\n', function() {
 		console.log("BT write OK");
 	}, function() {
 		console.error("BT write error");

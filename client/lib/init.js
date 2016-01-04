@@ -54,14 +54,14 @@ Template.registerHelper('isCordova', function() {
 Template.registerHelper('isAndroid', function() {
 	if(Meteor.isCordova)
 		return device.platform === "Android";
-	emse
+	else
 		return false;
 });
 
 Template.registerHelper('isiOS', function() {
 	if(Meteor.isCordova)
 		return device.platform === "iOS";
-	emse
+	else
 		return false;
 });
 

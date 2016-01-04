@@ -1,4 +1,4 @@
-Template.messages.onRendered(function() {
+ Template.messages.onRendered(function() {
 	setActive("messages");
 });
 

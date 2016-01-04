@@ -30,6 +30,14 @@
 			<button class="ui button blue" id="discover">Discover</button>
 			{{/unless}}
 		</div>
+		<br><br>
+		<div class="ui grid row">
+			<button class="ui button blue" id="tempsReel">Temps réel</button>
+			<button class="ui button blue" id="SD">Données SD</button>
+			{{#unless isiOS}}
+			<button class="ui button blue" id="stop">Stop</button>
+			{{/unless}}
+		</div>
 		{{#if devices}}
 			<br><br><br>
 			<table class="ui striped table">

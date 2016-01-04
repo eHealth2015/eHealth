@@ -1,6 +1,4 @@
 <template name="groups">
-	<h1>{{strings.header}}</h1>
-
 	<!-- People -->
 	<!-- Row with header people and add button -->
 	<div class="ui grid">
@@ -8,12 +6,15 @@
 			<div class="left floated column">
 				<h2 class="fitted item">{{strings.people}}</h2>
 			</div>
+			<!-- hidden add patient button -->
+			{{#if isUserMedic}}
 			<div class="right floated column">
 				<button id="addPatient" class="ui tealbis compact labeled icon button">
 					<i class="plus icon"></i>
 					Add
 				</button>
 			</div>
+			{{/if}}
 		</div>
 	</div>
 
@@ -90,16 +91,20 @@
 			<div class="left floated column">
 				<h2 class="fitted item">{{strings.groups}}</h2>
 			</div>
+			<!-- hidden add group button -->
+			{{#if isUserMedic}}
 			<div class="right floated column">
 				<button id="addGroup" class="ui tealbis compact labeled icon button">
 					<i class="plus icon"></i>
 					Add
 				</button>
 			</div>
+			{{/if}}
 		</div>
 	</div>
 
 	<!-- hidden add group row -->
+	{{#if isUserMedic}}
 	<div class="adding-group" style="display:none;">
 		<div class="big-spacing"></div>
 		<form id="addGroupForm" class="ui form">
@@ -113,6 +118,7 @@
 			</div>
 		</form>
 	</div>
+	{{/if}}
 
 	<!-- groups table -->
 	{{#if groups}}
@@ -154,15 +160,6 @@
 	{{/if}}
 
 	<div class="huge-spacing"></div>
-
-	<!-- REMARQUES
-	remarques:<br>
-	(accès pour plus d'info sur le patient ? accordéon ?)<br>
-	(todo: remove patient with confirmation)<br>
-	(todo: confimation avant suppr groupe)<br>
-	(todo: harmoniser les tableaux)<br>
-	(todo: espacer la fleche du bas et la croix ?)
-	-->
 
 	{{> groupDetails group}}
 

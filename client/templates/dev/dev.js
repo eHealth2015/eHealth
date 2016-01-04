@@ -19,6 +19,15 @@ Template.dev.helpers({
 });
 
 Template.dev.events({
+	'click #tempsReel': function(event) {
+		bluetooth.send('B');
+	},
+	'click #SD': function(event) {
+		bluetooth.send('C');
+	},
+	'click #stop': function(event) {
+		bluetooth.send('D');
+	},
 	'click .connect': function(event) {
 		var addr = event.currentTarget.getAttribute("addr");
 		var connect = event.currentTarget;
