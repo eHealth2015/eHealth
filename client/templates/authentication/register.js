@@ -53,6 +53,11 @@ Template.register.events({
 			type: "Medic"
 		});
 		updateLocationHash(2);
+	},
+	'click a.step': function(event, template) {
+		var url = event.currentTarget.href;
+		var hash = url[url.length-1];
+		updateLocationHash(hash);
 	}
 });
 
@@ -85,7 +90,7 @@ Template.register.helpers({
 			default:
 				return {one: "active",
 					two: "",
-					three: "",
+					three: ""
 				};
 			break;
 		}
@@ -103,6 +108,10 @@ Template.register.helpers({
 Template.register.onRendered(function() {
 	$('select.dropdown').dropdown();
 	if(window.location.hash === "#3" && !Meteor.userId()) {
+		updateLocationHash(1);
+	} else if (window.location.hash === "#2" && !Meteor.userId()) {
+		updateLocationHash(2);
+	} else if (window.location.hash === "#1") {
 		updateLocationHash(1);
 	}
 });
