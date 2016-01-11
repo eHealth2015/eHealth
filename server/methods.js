@@ -14,6 +14,14 @@ Meteor.methods({
 						}
 					}
 				});
+				Meteor.users.update({_id: patient._id}, {
+					$addToSet: {
+						'medics': {
+							_id: this.userId,
+							confirmed: false
+						}
+					}
+				});
 			}
 			else
 				throw new Meteor.Error("user-unknown", "Can't find the user");

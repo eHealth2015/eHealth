@@ -21,15 +21,16 @@ SequencesEncryption = new CollectionEncryption(
 	['dataId'],
 	{
 		onFinishedDocEncryption: function(doc) {
-			var thisUser = Meteor.users.findOne({_id: Meteor.userId()});
+			var thisUser = Meteor.user();
 			if(thisUser) {
 				var medics = thisUser.medics;
 
 				var groups = Groups.find().fetch();
-				
-				for(var i = 0, group = groups[0]; i < groups.length; i++, group = groups[i])
-					for(var j = 0; j < group.medics.length; j++)
-						medics.push(group.medics[j]._id);
+				if(groups) {
+					for(var i = 0, group = groups[0]; i < groups.length; i++, group = groups[i])
+						for(var j = 0; j < group.medics.length; j++)
+							medics.push(group.medics[j]._id);
+				}
 			
 				for(var i = 0; i < medics.length; i++)
 					Meteor.subscribe('principals', medics[i], function () {
@@ -44,11 +45,31 @@ SequencesEncryption = new CollectionEncryption(
 Meteor.subscribe('sequences');
 
 Tracker.autorun(function() {
-	var sequences = Sequences.find({userId: Meteor.userId()}).fetch();
+	if(Meteor.user() && Meteor.user().profile.type === "Medic" && Meteor.user().patients) {
+		var patientIds = Meteor.user().patients.map(function(p) {
+			return p._id;
+		});
+		console.log(patientIds);
+
+		var groups = Groups.find().fetch();		
+		for(var i = 0, group = groups[0]; i < groups.length; i++, group = groups[i])
+			for(var j = 0; j < group.patients.length; j++)
+				patientIds.push(group.patients[j]._id);
+
+		var sequences = Sequences.find({
+			userId: {
+				$in: patientIds
+			}
+		}).fetch();
+
+	}
+	else
+		var sequences = Sequences.find({userId: Meteor.userId()}).fetch();
+		
 	var ids = sequences.map(function(encrypted) {
-		var clear = Sequences.findOne({_id: encrypted._id});
-		return clear.dataId;
-	});
+			var clear = Sequences.findOne({_id: encrypted._id});
+			return clear.dataId;
+		});
 	console.log("check");
 	Meteor.subscribe('datas', ids);
 });
