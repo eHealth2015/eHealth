@@ -2,16 +2,16 @@ Accounts.onCreateUser(function(options, user) {
 
 	// CHECK CODE
 
-	if(options && options.code != "") {
-		var code = Codes.findOne({_id: options.code});
+	// if(options && options.code != "") {
+	// 	var code = Codes.findOne({_id: options.code});
 		
-		if(!code || !options.profile.type === code.type)
-			throw new Meteor.Error("newuser-deny", "Wrong code");
+	// 	if(!code || !options.profile.type === code.type)
+	// 		throw new Meteor.Error("newuser-deny", "Wrong code");
 
-		// TODO
-		// 
+	// 	// TODO
+	// 	// 
 
-	}
+	// }
 
 	if (options.profile) {
     	user.profile = options.profile;
