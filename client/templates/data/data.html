@@ -6,15 +6,14 @@
 	{{/if}}
 
 	{{#if isUserPatient}}
-	<h1>Data - Patient part</h1>
+		<h1>Data - Patient part</h1>
+		{{> reactiveTable collection=collection settings=settingsTable class="ui celled table"}}
 	{{/if}}
 
 	{{#if display.table}}
-	{{> reactiveTable collection=collection settings=settingsTable class="ui celled table"}}
+		{{> reactiveTable collection=collection settings=settingsTable class="ui celled table"}}
 	{{/if}}
 
-	{{#if display.graph}}
 	<div id="chart-container" style="min-width: 310px; height: 400px;"></div>
-	{{/if}}
 
 </template>

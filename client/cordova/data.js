@@ -78,7 +78,7 @@ newData = function(data) {
 			for (var i = 0; i < payload.length; i++) {
 				var detailData = getData(payload[i]);
 				var propName = 'data.'+convertLetterToSensor(detailData[0]);
-				updateDataObj[propName] = {x: timestamp, y: detailData[1]};
+				updateDataObj[propName] = {x: parseFloat(timestamp), y: parseFloat(detailData[1])};
 			}
 			updateData(dataDbElement._id, {
 				$addToSet: updateDataObj,
@@ -92,7 +92,7 @@ newData = function(data) {
 			var data = {};
 			for (var i = 0; i < payload.length; i++) {
 				var detailData = getData(payload[i]);
-				data[convertLetterToSensor(detailData[0])] = [{x: timestamp, y: detailData[1]}];
+				data[convertLetterToSensor(detailData[0])] = [{x: parseFloat(timestamp), y: parseFloat(detailData[1])}];
 			}
 			insertData({
 				seqId: seqId,

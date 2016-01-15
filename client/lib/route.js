@@ -68,7 +68,14 @@ Router.route('/home', {
 });
 Router.route('/data/:userId?/:sequenceId?', {
 	template: 'data',
-	controller: 'AppRouter'
+	controller: 'AppRouter',
+	onBeforeAction: function() {
+		if (isUserPatient() && this.params.userId != Meteor.userId()) {
+			this.redirect("/data/" + Meteor.userId());
+		} else {
+			this.render();
+		}
+	}
 });
 Router.route('/groups/:_id?', {
 	template: 'groups',
