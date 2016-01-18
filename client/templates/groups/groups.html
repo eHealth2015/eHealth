@@ -65,10 +65,12 @@
 						<i class="mail outline icon"></i>
 						Message
 					</a>
+					{{#if isUserMedic}}
 					<button class="ui tiny red basic icon button" id="deletePatientFromMedic">
 						<i class="remove icon"></i>
 						Remove
 					</button>
+					{{/if}}
 				</td>
 			</tr>
 			{{/each}}

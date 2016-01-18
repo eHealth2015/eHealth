@@ -1,18 +1,6 @@
 var dataLoaded = [];
 Template.data.onRendered(function() {
 	setActive("data");
-	var userId = Router.current().params.userId;
-	var sequenceId = Router.current().params.sequenceId;
-
-	/*if (userId && sequenceId) {
-		// TODO
-		// var sequence = getSequenceBySequenceId(sequenceId);
-		var data = [
-			{x: 1, y: 0.001},
-			{x: 2, y: -0.446}
-		];
-		generateChart("#chart-container", data);
-	}*/
 });
 
 Template.data.events({
@@ -31,7 +19,8 @@ Template.data.helpers({
 			var patients = getPatientsForMedic();
 
 			if (userId && sequenceId) {
-				// nothing to do I think
+				dataLoaded = getSequence(sequenceId);
+				return dataLoaded;
 			} else if (userId) {
 				var patient = findById(patients, userId);
 				if (patient) {
@@ -41,10 +30,19 @@ Template.data.helpers({
 				return patients;
 			}
 		} else if (isUserPatient()) {
-			if (!sequenceId)
+			if (!userId && !sequenceId) {
+				var events = {
+					load: function() {
+						var series = this.series[0];
+						setInterval(function() {
+							// TODO
+						}, 1000);
+					}
+				};
+			} else if (!sequenceId)
 				return getMySequences();
 			else {
-				dataLoaded = getMySequence(sequenceId);
+				dataLoaded = getSequence(sequenceId);
 				return dataLoaded;
 			}
 		}
@@ -55,7 +53,6 @@ Template.data.helpers({
 		var sequenceId = Router.current().params.sequenceId;
 
 		if (isUserMedic()) {
-
 			if (userId && sequenceId) {
 				return generateTableForSequence();
 			} else if (userId) {
@@ -90,13 +87,12 @@ function getPatientsForMedic() {
 }
 
 function getSequencesByPatientId(patient) {
-	//Meteor.subscribe("sequences");
-	return Sequences.findOne({
-		// TODO
+	return Datas.find({
+		_id: patient._id
 	}).fetch();
 }
 
-function getMySequence(sequenceId) {
+function getSequence(sequenceId) {
 	var sequence = Datas.findOne({_id: sequenceId});
 	var sensors = [];
 	if (sequence) {
@@ -112,10 +108,6 @@ function getMySequence(sequenceId) {
 		}
 	}
 	return sensors;
-}
-
-function getSequenceBySequenceId(sequenceId) {
-	// TODO
 }
 
 function findById(array, id) {
@@ -187,7 +179,9 @@ function generateTableForSequence() {
 	};
 }
 
-function generateChart(id, object) {
+function generateChart(id, object, eventParam) {
+	var events = (eventParam) ? eventParam : null;
+
 	$(id).highcharts('StockChart', {
 		chart: {
 			backgroundColor: "#eee",
@@ -209,6 +203,7 @@ function generateChart(id, object) {
 			}],
 			selected: 0
 		},
+		events: events,
 		title: {
 			text: object.name
 		},

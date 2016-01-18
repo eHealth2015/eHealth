@@ -9,7 +9,9 @@ Meteor.publish('sequences', function() {
 		else
 			return Sequences.find({
 				userId: {
-					$in: thisUser.patients
+					$in: thisUser.patients.map(function(e) {
+						return e._id;
+					})
 				}
 			});
 	}

@@ -34,7 +34,15 @@ Template.groups.helpers({
 			});
 		}
 		else if(isUserPatient()) {
-			return [];
+			return Meteor.user().medics.map(function(medic) {
+				var user = Meteor.users.findOne({_id: medic._id});
+				if(user) {
+					medic.firstName = user.profile.firstName;
+					medic.lastName = user.profile.lastName;
+					medic.gender = user.profile.gender;
+				}
+				return medic;
+			});
 		}
 		return [];
 	},

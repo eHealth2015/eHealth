@@ -24,6 +24,10 @@ Meteor.publish("getOtherUsers", function () {
 			for(var i = 0; i < thisUser.patients.length; i++) {
 				ids.push(thisUser.patients[i]._id);
 			}
+		} else if (thisUser.profile.type === "Patient") {
+			for(var i = 0; i < thisUser.medics.length; i++) {
+				ids.push(thisUser.medics[i]._id);
+			}
 		}
 
 		return Meteor.users.find({ _id: {
