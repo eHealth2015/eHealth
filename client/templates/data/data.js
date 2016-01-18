@@ -4,6 +4,21 @@ Template.data.onRendered(function() {
 });
 
 Template.data.events({
+	'click #connect': function(event) {
+		if(Session.get('bt').connected)
+			bluetooth.disconnect();
+		else
+			bluetooth.try2connect();
+	},
+	'click #realTimeData': function(event) {
+		bluetooth.send('B');
+	},
+	'click #SD': function(event) {
+		bluetooth.send('C');
+	},
+	'click #stop': function(event) {
+		bluetooth.send('D');
+	},
 	'click .sensor': function(event) {
 		var hash = event.currentTarget.getAttribute("href");
 		var id = parseInt(hash.replace("#", ""));
@@ -12,17 +27,71 @@ Template.data.events({
 })
 
 Template.data.helpers({
+	btConnection: function() {
+		if(!Session.get('bt').connected)
+			return {
+				text: "Connect",
+				class: "disabled"
+			};	
+		else
+			return {
+				text: "Disconnect",
+				class: ""
+			};
+	},
+	breadcrumb: function() {
+		var patientId = Router.current().params.patientId;
+		var dataId = Router.current().params.sequenceId;
+		
+		if(!patientId && !dataId)
+			return {
+				links: [],
+				active: "Data"
+			};
+		else if(patientId) {
+			var links = [{label: "Data", link: "/data"}];
+			var patient = Meteor.users.findOne({_id: patientId});
+			if(patient) {
+				var firstName = patient.profile.firstName;
+				var lastName = patient.profile.lastName;
+			}
+			else {
+				Router.go('/data');
+				// TODO SHOW ERROR
+			}
+
+			if(!dataId)
+				return {
+					links: links,
+					active: firstName+" "+lastName
+				}
+			else {
+				var data = Datas.findOne({_id: dataId});
+				if(data) {
+					links.push({label: firstName+" "+lastName, link: '/data/'+patientId});
+					return {
+						links: links,
+						active: "Sequence "+data.seqId
+					}
+				}
+				else {
+					Router.go('/data/'+patientId);
+					// TODO SHOW ERROR
+				}
+			}
+		}
+	},
 	collection: function() {
-		var userId = Router.current().params.userId;
+		var patientId = Router.current().params.patientId;
 		var sequenceId = Router.current().params.sequenceId;
 		if (isUserMedic()) {
 			var patients = getPatientsForMedic();
 
-			if (userId && sequenceId) {
+			if (patientId && sequenceId) {
 				dataLoaded = getSequence(sequenceId);
 				return dataLoaded;
-			} else if (userId) {
-				var patient = findById(patients, userId);
+			} else if (patientId) {
+				var patient = findById(patients, patientId);
 				if (patient) {
 					return getSequencesByPatientId(patient);
 				}
@@ -30,7 +99,7 @@ Template.data.helpers({
 				return patients;
 			}
 		} else if (isUserPatient()) {
-			if (!userId && !sequenceId) {
+			if (!patientId && !sequenceId) {
 				var events = {
 					load: function() {
 						var series = this.series[0];
@@ -49,22 +118,22 @@ Template.data.helpers({
 		return {};
 	},
 	settingsTable: function() {
-		var userId = Router.current().params.userId;
+		var patientId = Router.current().params.patientId;
 		var sequenceId = Router.current().params.sequenceId;
 
 		if (isUserMedic()) {
-			if (userId && sequenceId) {
-				return generateTableForSequence();
-			} else if (userId) {
-				return generateTableForPatient();
+			if (patientId && sequenceId) {
+				return generateTableForSequence(sequenceId);
+			} else if (patientId) {
+				return generateTableForPatient(patientId);
 			} else {
 				return generateTableForPatients();
 			}
 		} else if (isUserPatient()) {
 			if (!sequenceId)
-				return generateTableForPatient();
+				return generateTableForPatient(patientId);
 			else
-				return generateTableForSequence();
+				return generateTableForSequence(sequenceId);
 		}
 		return {};
 	}
@@ -87,9 +156,14 @@ function getPatientsForMedic() {
 }
 
 function getSequencesByPatientId(patient) {
-	return Datas.find({
-		_id: patient._id
-	}).fetch();
+	var dataIds = Sequences.find({
+		userId: patient._id
+	}).fetch().map(function(e) {
+		return Sequences.findOne({_id: e._id}).dataId;
+	});
+	return Datas.find({_id: {
+		$in: dataIds
+	}});
 }
 
 function getSequence(sequenceId) {
@@ -133,18 +207,40 @@ function generateTableForPatients() {
 			{ key: 'firstName', label: 'First Name' },
 			{ key: 'lastName', label: 'Last Name' },
 			{ key: 'gender', label: 'Gender' },
+			{ key: '_id', label: 'Sequences', fn: function(patientId) {
+				return Sequences.find({userId: patientId}).count();
+			}},
+			{ key: '_id', label: 'Alerts', fn: function(patientId) {
+				return getNbAlertsById(patientId);
+			}},
 			{ key: '_id', label: '', fn: function(value) {
-				return new Spacebars.SafeString('<a class="compact ui teal button" href="/data/' + value + '">Sequences</a>');
+				return new Spacebars.SafeString('<a class="compact ui teal button" href="/data/' + value + '">Show sequences</a>');
 			}}
 		]
 	};
 }
 
-function generateTableForPatient() {
+function getNbAlertsById(patientId) {
+	var dataIds = Sequences.find({userId: patientId}).fetch().map(function(sequence) {
+		return Sequences.findOne({_id: sequence._id}).dataId;
+	});
+	var nb = 0;
+	Datas.find({_id: {
+		$in: dataIds
+	}}).fetch().map(function(data) {
+		nb += data.alerts.length;
+	});
+	return nb;
+}
+
+function generateTableForPatient(userId) {
 	return {
 		showFilter: true,
 		fields: [
-			{ key: 'data', label: 'List of data', fn: function(value) {
+			{ key: 'seqId', label: 'Sequences', fn: function(value) {
+				return "Sequence "+value;
+			}},
+			{ key: 'data', label: 'List of sensors', fn: function(value) {
 				var keys = "";
 				for (var key in value) {
 					if (keys != "")
@@ -160,18 +256,32 @@ function generateTableForPatient() {
 				return format;
 			}
 			},
+			{ key: 'tEnd', label: 'End time', fn: function(value) {
+				var date = new Date(parseInt(value));
+				var format = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate() + " - " + date.getHours() + ":" + date.getMinutes();
+				return format;
+			}},
+			{ key: 'alerts', label: 'Alerts', fn: function(value) {
+				return value.length;
+			}},
 			{ key: '_id', label: '', fn: function(value) {
-				return new Spacebars.SafeString('<a class="compact ui teal button" href="/data/' + Meteor.userId() + '/' + value + '">Details</a>');
+				return new Spacebars.SafeString('<a class="compact ui teal button" href="/data/' + userId + '/' + value + '">Show</a>');
 			}}
 		]
 	};
 }
 
-function generateTableForSequence() {
+function generateTableForSequence(sequenceId) {
+	var data = Datas.findOne({_id: sequenceId});
 	return {
 		showFilter: true,
 		fields: [
 			{ key: 'name', label: 'Sensor' },
+			{ key: 'name', label: 'Alerts', fn: function(value) {
+				return data.alerts.filter(function(e) {
+					if(e[1] === value) return true;
+				}).length;
+			}},
 			{ key: 'id', label: '', fn: function(value) {
 				return new Spacebars.SafeString('<a class="sensor compact ui teal button" href="#' + value + '">View</a>');
 			}}

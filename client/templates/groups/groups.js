@@ -22,6 +22,7 @@ Template.groups.helpers({
 		}
 	},
 	people: function() {
+		Meteor.subscribe('getOtherUsers');
 		if(isUserMedic()) {
 			return Meteor.user().patients.map(function(patient) {
 				var user = Meteor.users.findOne({_id: patient._id});
@@ -90,12 +91,14 @@ Template.groups.helpers({
 Template.groups.events({
 	'click #deletePatientFromMedic': function(event) {
 		var patientId = this._id;
-		Meteor.users.update({_id: Meteor.userId()}, {
-			$pull: {
-				'patients': {
-					_id: patientId
-				}
+		Meteor.call('removePatient2medic', patientId, function(error) {
+			if(error) {
+				// TODO
+				console.log("error");
+				console.log(error);
 			}
+			else
+				Meteor.subscribe("getOtherUsers");
 		});
 	},
 	'click #deletePatientFromGroup': function(event) {

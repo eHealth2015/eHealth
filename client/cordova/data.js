@@ -16,6 +16,7 @@ newData = function(data) {
 
 		case "E":
 			E(dataTab);
+			saveData(dataTab);
 			break;
 
 		case "F":

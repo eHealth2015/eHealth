@@ -66,11 +66,11 @@ Router.route('/passwordRecovery/:token?', {
 Router.route('/home', {
 	controller: 'AppRouter'
 });
-Router.route('/data/:userId?/:sequenceId?', {
+Router.route('/data/:patientId?/:sequenceId?', {
 	template: 'data',
 	controller: 'AppRouter',
 	onBeforeAction: function() {
-		if (isUserPatient() && this.params.userId != Meteor.userId()) {
+		if (isUserPatient() && this.params.patientId != Meteor.userId()) {
 			this.redirect("/data/" + Meteor.userId());
 		} else {
 			this.render();

@@ -1,15 +1,57 @@
 <template name="data">
-	<h1>Data - common part</h1>
-
-	{{#if isUserMedic}}
-	<h1>Data - Medic part</h1>
-	{{/if}}
+	<h1>
+		<div class="ui huge breadcrumb"> 
+			{{#each breadcrumb.links }}
+				<a class="section" href="{{link}}">{{label}}</a>
+				<i class="right chevron icon divider"></i>
+			{{/each}}
+			<div class="active section">{{breadcrumb.active}}</div>
+		</div>
+	</h1>
 
 	{{#if isUserPatient}}
-		<h1>Data - Patient part</h1>
+	{{#if isCordova}}
+	<div class="ui segment">
+		<div class="ui four column grid">
+			<div class="column">
+				<button class="ui small button blue" id="connect">
+					<i><img style="width: 1rem;" src="/bluetooth_white.svg"></i>
+					{{btConnection.text}}
+				</button>
+			</div>
+			<div class="column">
+				<button class="ui small button blue {{btConnection.class}}" id="realTimeData">
+					<i class="line chart icon"></i>
+					Real time data
+				</button>
+			</div>
+			<div class="column">
+				<button class="ui small button blue {{btConnection.class}}" id="SD">
+					<i class="download icon"></i>
+					SD card data
+				</button>
+			</div>
+			<div class="column">
+				<button class="ui small button blue {{btConnection.class}}" id="stop">
+					<i class="stop icon"></i>
+					Stop
+				</button>
+			</div>
+		</div>
+	</div>
+	{{/if}}
+	{{/if}}
+	
+	{{#if collection}}
+		{{> reactiveTable collection=collection settings=settingsTable class="ui celled table"}}
+	{{else}}
+		<div class="italic">
+			<div class="big-spacing"></div>
+			<i class="warning circle icon"></i>
+			<span>Nothing to show</span>
+		</div>
 	{{/if}}
 
-	{{> reactiveTable collection=collection settings=settingsTable class="ui celled table"}}
 
 	<div id="chart-container" style="min-width: 310px; height: 400px;"></div>
 

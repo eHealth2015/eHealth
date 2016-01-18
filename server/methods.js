@@ -1,33 +1,68 @@
 Meteor.methods({
 	addPatient2medic: function(firstName, lastName) {
-		if(this.userId && Meteor.users.findOne({_id: this.userId}).profile.type === "Medic") {
-			var patient = Meteor.users.findOne({
-				'profile.firstName': firstName,
-				'profile.lastName': lastName
-			});
-			if(patient && patient.profile.type === "Patient") {
-				Meteor.users.update({_id: this.userId}, {
-					$addToSet: {
-						'patients': {
-							_id: patient._id,
-							confirmed: false
-						}
-					}
+		if(this.userId) {
+			if(Meteor.user().profile.type === "Medic") {
+				var patient = Meteor.users.findOne({
+					'profile.firstName': firstName,
+					'profile.lastName': lastName
 				});
-				Meteor.users.update({_id: patient._id}, {
-					$addToSet: {
-						'medics': {
-							_id: this.userId,
-							confirmed: false
+				if(patient && patient.profile.type === "Patient") {
+					Meteor.users.update({_id: this.userId}, {
+						$addToSet: {
+							'patients': {
+								_id: patient._id,
+								confirmed: false
+							}
 						}
-					}
-				});
+					});
+					Meteor.users.update({_id: patient._id}, {
+						$addToSet: {
+							'medics': {
+								_id: this.userId,
+								confirmed: false
+							}
+						}
+					});
+				}
+				else
+					throw new Meteor.Error("user-unknown", "Can't find the user");
 			}
 			else
-				throw new Meteor.Error("user-unknown", "Can't find the user");
+				throw new Meteor.Error("wrong-account-type", "You are not allowed to do this action");
 		}
 		else
-			return null;
+			throw new Meteor.Error("loggin-needed", "You need to be logged in to do this action");
+	},
+	removePatient2medic: function(patientID) {
+		if(this.userId) {
+			if(Meteor.user().profile.type === "Medic") {
+				var patient = Meteor.users.findOne({_id: patientID});
+				if(patient && patient.profile.type === "Patient") {
+					Meteor.users.update({
+						_id: patientID
+					}, {
+						$pull: {
+							'medics': {
+								_id: this.userId
+							}
+						}
+					});
+					Meteor.users.update({_id: this.userId}, {
+						$pull: {
+							'patients': {
+								_id: patientID
+							}
+						}
+					});
+				}
+				else
+					throw new Meteor.Error("user-unknown", "Can't find the user or the user is not a patient");
+			}
+			else
+				throw new Meteor.Error("wrong-account-type", "You are not allowed to do this action");
+		}
+		else
+			throw new Meteor.Error("loggin-needed", "You need to be logged in to do this action");
 	},
 	addPatient2group: function(firstName, lastName, groupId) {
 		// TODO check if userID is admin in group

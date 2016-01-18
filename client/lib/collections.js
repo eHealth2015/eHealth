@@ -22,7 +22,7 @@ SequencesEncryption = new CollectionEncryption(
 	{
 		onFinishedDocEncryption: function(doc) {
 			var thisUser = Meteor.user();
-			if(thisUser) {
+			if(thisUser && thisUser.profile.type === "Patient") {
 				var medics = thisUser.medics.map(function(e) {
 					return e._id;
 				});
@@ -33,10 +33,12 @@ SequencesEncryption = new CollectionEncryption(
 						for(var j = 0; j < group.medics.length; j++)
 							medics.push(group.medics[j]._id);
 				}
+				console.log("medics:")
 				console.log(medics);
 				for(var i = 0; i < medics.length; i++)
-					Meteor.subscribe('principals', medics[i], function () {
-						MessagesEncryption.shareDocWithUser(doc._id, medics[i]);
+					var thisMedicId = medics[i];
+					Meteor.subscribe('principals', thisMedicId, function () {
+						SequencesEncryption.shareDocWithUser(doc._id, thisMedicId);
 					});
 			}
 		}
@@ -51,6 +53,7 @@ Tracker.autorun(function() {
 		var patientIds = Meteor.user().patients.map(function(p) {
 			return p._id;
 		});
+		console.log("patientIds");
 		console.log(patientIds);
 
 		var groups = Groups.find().fetch();		
