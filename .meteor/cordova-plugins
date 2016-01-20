@@ -1,3 +1,3 @@
 cordova-plugin-bluetooth-serial@0.4.4
-cordova-plugin-samsungpass@1.0.0
+cordova-plugin-samsungpass@https://github.com/tabrindle/cordova-plugin-samsungpass.git#39d81054ed872d4ce40bea15bc891fa7ae6db297
 cordova-plugin-touch-id@3.0.0

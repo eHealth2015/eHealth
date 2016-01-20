@@ -9,23 +9,19 @@ Template.passwordRecovery.events({
 			if(token && token != "") {
 				Accounts.resetPassword(token, password1, function(error){
 					if (error) {
-						// TODO SHOW ERROR
-						console.error(error);
+						newMsg("error", error.message);
 					} else {
 						Router.go('/home');
-						// TODO TELL PASSWORD CHANGED
-						console.log("PASSWORD CHANGED");
+						newMsg("sucess", "Password changed");
 					}
 				});
 			}
 			else {
-				// TODO TOKEN EMPTY
-				console.log("EMPTY TOKEN");
+				newMsg("error", "Error: empty token");
 			}
 		}
 		else {
-			// TODO ERROR DIFFERENT PASSSWORDS
-			console.log("PASSWORDS ARE DIFFERENT")
+			newMsg("error", "Error: passwords are differents");
 		}
 	}
 });

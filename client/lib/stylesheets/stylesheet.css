@@ -148,44 +148,6 @@ table thead th {
 	background: #04aab6 !important;
 }
 
-/* Old Sidebar
-.sidebar {
-	position: fixed;
-	width: 80px;
-	background: #333;
-	top: 0;
-	bottom: 0;
-}
-
-.sidebar ul {
-	list-style: none;
-}
-
-.sidebar li {
-	font-size: 1.75em;
-	line-height: 3em;
-	text-align: center;
-	margin: 0;
-}
-
-.sidebar li.active, .sidebar li.active:hover {
-	background: #04aab6;
-}
-
-.sidebar li:hover {
-	background: #4d4d4d;
-}
-
-.sidebar li a {
-	color: #eee;
-	text-decoration: none;
-	display: block;
-}
-
-.sidebar ul {
-	margin: 0px;
-	padding: 0px;
-}*/
 
 .ui.steps .step.active {
 	background: #d6d6d6;
@@ -199,46 +161,6 @@ table thead th {
 	color: #04AAB6;
 }
 
-/* Typography
-––––––––––––––––––––––––––––––––––––––––––––––––––
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: 2rem;
-  font-weight: 300; }
-h1 { font-size: 4.0rem !important; line-height: 1.2;  letter-spacing: -.1rem;}
-h2 { font-size: 3.6rem !important; line-height: 1.25; letter-spacing: -.1rem; }
-h3 { font-size: 3.0rem !important; line-height: 1.3;  letter-spacing: -.1rem; }
-h4 { font-size: 2.4rem !important; line-height: 1.35; letter-spacing: -.08rem; }
-h5 { font-size: 1.8rem !important; line-height: 1.5;  letter-spacing: -.05rem; }
-h6 { font-size: 1.5rem !important; line-height: 1.6;  letter-spacing: 0; }
-
-/* Larger than phablet
-@media (min-width: 550px) {
-  h1 { font-size: 5.0rem; }
-  h2 { font-size: 4.2rem; }
-  h3 { font-size: 3.6rem; }
-  h4 { font-size: 3.0rem; }
-  h5 { font-size: 2.4rem; }
-  h6 { font-size: 1.5rem; }
-}
-
-label,
-legend {
-	display: block;
-	margin-top: .5rem;
-	margin-bottom: .2rem;
-	font-weight: 600;
-}
-
-fieldset {
-	padding: 0;
-	border-width: 0;
-}
-
-label > .label-body {
-  display: inline-block;
-  margin-left: .5rem;
-  font-weight: normal; }*/
 
 @media all and (min-width: 768px) {
 	.pusher {

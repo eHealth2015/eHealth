@@ -1,10 +1,4 @@
 Template.layout.events({
-	'click #bt': function(event) {
-		if(Session.get('bt').connected)
-			bluetooth.disconnect();
-		else
-			bluetooth.try2connect();
-	},
 	'click .logout': function(event) {
 		Accounts.logout();
 		$("body").removeAttr("class");
@@ -18,19 +12,6 @@ Template.layout.events({
 });
 
 Template.layout.helpers({
-	btTry2connect: function() {
-		if(Session.get('bt').trying)
-			return "active";
-		else
-			return "disabled";
-	},
-	color: function() {
-		//if(Meteor.isCordova)
-		var color = {};
-		color.wifi = Meteor.status().connected ? "" : "opp";
-		color.bluetooth = Session.get('bt').connected ? "" : "opp";
-		return color;
-	},
 	nbMessages: function() {
 		return Messages.find().count();
 	},

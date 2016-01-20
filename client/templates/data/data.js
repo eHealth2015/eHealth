@@ -57,7 +57,7 @@ Template.data.helpers({
 			}
 			else {
 				Router.go('/data');
-				// TODO SHOW ERROR
+				newMsg("error", 'Error: patient not found');
 			}
 
 			if(!dataId)
@@ -76,7 +76,7 @@ Template.data.helpers({
 				}
 				else {
 					Router.go('/data/'+patientId);
-					// TODO SHOW ERROR
+					newMsg("error", 'Error: sequence not found');
 				}
 			}
 		}

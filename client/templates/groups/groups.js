@@ -93,39 +93,33 @@ Template.groups.events({
 		var patientId = this._id;
 		Meteor.call('removePatient2medic', patientId, function(error) {
 			if(error) {
-				// TODO
-				console.log("error");
-				console.log(error);
+				newErro(error.message);
 			}
 			else
 				Meteor.subscribe("getOtherUsers");
 		});
 	},
 	'click #deletePatientFromGroup': function(event) {
-		if(true) { // TODO CHECK IF ADMIN
-			var groupId = Router.current().getParams()._id;
-			var patientId = this._id;
-			Groups.update({_id: groupId}, {
-				$pull: {
-					patients: {
-						_id: patientId
-					}
+		var groupId = Router.current().getParams()._id;
+		var patientId = this._id;
+		Groups.update({_id: groupId}, {
+			$pull: {
+				patients: {
+					_id: patientId
 				}
-			});
-		}
+			}
+		});
 	},
 	'click #deleteMedicFromGroup': function(event) {
-		if(true) { // TODO CHECK IF ADMIN
-			var groupId = Router.current().getParams()._id;
-			var medicId = this._id;
-			Groups.update({_id: groupId}, {
-				$pull: {
-					medics: {
-						_id: medicId
-					}
+		var groupId = Router.current().getParams()._id;
+		var medicId = this._id;
+		Groups.update({_id: groupId}, {
+			$pull: {
+				medics: {
+					_id: medicId
 				}
-			});
-		}
+			}
+		});
 	},
 	'click #addPatient2group': function(event, template) {
 		if(this.admin) {
@@ -134,9 +128,7 @@ Template.groups.events({
 			var groupId = this._id;
 			Meteor.call('addPatient2group', newFirstName, newLastName, groupId, function(error) {
 				if(error) {
-					// TODO
-					console.log("error");
-					console.log(error);
+					newMsg("error", error.message);
 				}
 				else {
 					Meteor.subscribe("getOtherUsers")
@@ -153,9 +145,7 @@ Template.groups.events({
 			var groupId = this._id;
 			Meteor.call('addMedic2group', newFirstName, newLastName, groupId, function(error) {
 				if(error) {
-					// TODO
-					console.log("error");
-					console.log(error);
+					newMsg("error", error.message);
 				}
 				else {
 					Meteor.subscribe("getOtherUsers")
@@ -187,8 +177,7 @@ Template.groups.events({
 			var groupId = this._id;
 			Groups.remove({_id: groupId}, function(error) {
 				if(error) {
-					// TODO
-					;
+					newMsg("error", error.message);
 				}
 				else {
 					$('#groupDetailsModal').modal('hide');
@@ -243,8 +232,7 @@ Template.groups.events({
 			medics: [{_id: Meteor.userId(), admin: true}]
 		}, function(error, id) {
 			if(error) {
-				// TODO
-				;
+				newMsg("error", error.message);
 			}
 			else {
 				$('.adding-group').hide(500);

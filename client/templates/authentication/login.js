@@ -1,18 +1,56 @@
+Template.login.helpers({
+	fingerprint: function() {
+		if(Meteor.isCordova && (fingerprint.apple || fingerprint.samsung)) {
+			var available = window.localStorage.getItem("fingerprintAvailable");
+			return available === "true";
+		}
+		else
+			return false;
+	}
+});
+
 Template.login.events({
+	'click #fingerprint': function(event) {
+		event.preventDefault();
+		var email = window.localStorage.getItem("email");
+		var password = window.localStorage.getItem("password");
+
+		fingerprint.check(function() {
+			Accounts.callLoginMethod({
+				methodArguments: [{
+					user: {email: email},
+					password: {digest: password, algorithm: "sha-256"}
+				}],
+				userCallback: function(error) {
+					if (error) {
+						newMsg("error", error.message);
+					} else {
+						EncryptionUtils.onSignIn(password);
+						Router.go('/home');
+					}
+				}
+			});
+		}, function() {
+			newMsg("error", "Fail to login with fingerprint");
+		});
+	},
 	'submit form': function(event, template) {
 		event.preventDefault();
 		var email = template.find('#email').value;
 		var password = template.find('#password').value;
-
-		Meteor.loginWithPassword(email, password, function(error) {
-			if (error) {
-				// TODO SHOW ERROR
-				console.error(error);
-			} else {
-				EncryptionUtils.onSignIn(password);
-				Router.go('/home');
-			}
-		});
+		if(email && email != "" && password && password != "") {
+			Meteor.loginWithPassword(email, password, function(error) {
+				if (error) {
+					newMsg("error", error.message);
+				} else {
+					EncryptionUtils.onSignIn(password);
+					window.localStorage.setItem("email", email);
+					window.localStorage.setItem("password", Accounts._hashPassword(password).digest);
+					window.localStorage.setItem("fingerprintAvailable", "true");
+					Router.go('/home');
+				}
+			});
+		}
 	},
 	'click .passwordRecovery': function(event, template) {
 		event.preventDefault();
@@ -23,18 +61,15 @@ Template.login.events({
 				email: email
 			}, function(error) {
 				if(error) {
-					//TODO SHOW ERROR
-					console.log(error);
+					newMsg("error", error.message);
 				}
 				else {
-					// TODO TELL THAT THE EMAIL HAS BEEN SENT
-					console.log("EMAIL SENT");
+					newMsg("error", "An email has been sent");
 				}
 			});
 		}
 		else {
-			// TODO : HIDE PASSWORD FIELD AND TELL THE USER TO GIVE HIS EMAIL FFS !
-			console.log("PLEASE ENTER YOUR EMAIL");
+			newMsg("error", "Error: please enter your email");
 		}
 	}
 });

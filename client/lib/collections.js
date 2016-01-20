@@ -36,46 +36,52 @@ SequencesEncryption = new CollectionEncryption(
 				console.log("medics:")
 				console.log(medics);
 				for(var i = 0; i < medics.length; i++)
-					var thisMedicId = medics[i];
-					Meteor.subscribe('principals', thisMedicId, function () {
-						SequencesEncryption.shareDocWithUser(doc._id, thisMedicId);
-					});
+					futurSubscribe(medics[i]);
 			}
 		}
 	}
 );
 
-// TEMP
+function futurSubscribe(medicId) {
+	Meteor.subscribe('principals', medicId, function () {
+		SequencesEncryption.shareDocWithUser(doc._id, medicId);
+	});
+}
+
 Meteor.subscribe('sequences');
 
+principalsSub = Meteor.subscribe('principals');
+
 Tracker.autorun(function() {
-	if(Meteor.user() && Meteor.user().profile.type === "Medic" && Meteor.user().patients) {
-		var patientIds = Meteor.user().patients.map(function(p) {
-			return p._id;
-		});
-		console.log("patientIds");
-		console.log(patientIds);
+	if(principalsSub.ready()) {
+		if(Meteor.user() && Meteor.user().profile.type === "Medic" && Meteor.user().patients) {
+			var patientIds = Meteor.user().patients.map(function(p) {
+				return p._id;
+			});
+			console.log("patientIds");
+			console.log(patientIds);
 
-		var groups = Groups.find().fetch();		
-		for(var i = 0, group = groups[0]; i < groups.length; i++, group = groups[i])
-			for(var j = 0; j < group.patients.length; j++)
-				patientIds.push(group.patients[j]._id);
+			var groups = Groups.find().fetch();		
+			for(var i = 0, group = groups[0]; i < groups.length; i++, group = groups[i])
+				for(var j = 0; j < group.patients.length; j++)
+					patientIds.push(group.patients[j]._id);
 
-		var sequences = Sequences.find({
-			userId: {
-				$in: patientIds
-			}
-		}).fetch();
+			var sequences = Sequences.find({
+				userId: {
+					$in: patientIds
+				}
+			}).fetch();
 
+		}
+		else
+			var sequences = Sequences.find({userId: Meteor.userId()}).fetch();
+			
+		var ids = sequences.map(function(encrypted) {
+				var clear = Sequences.findOne({_id: encrypted._id});
+				return clear.dataId;
+			});
+		console.log("ids");
+		console.log(ids);
+		Meteor.subscribe('datas', ids);
 	}
-	else
-		var sequences = Sequences.find({userId: Meteor.userId()}).fetch();
-		
-	var ids = sequences.map(function(encrypted) {
-			var clear = Sequences.findOne({_id: encrypted._id});
-			return clear.dataId;
-		});
-	console.log("ids");
-	console.log(ids);
-	Meteor.subscribe('datas', ids);
 });

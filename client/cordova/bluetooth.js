@@ -14,15 +14,13 @@ bluetooth.try2connect = function() {
 		bluetoothSerial.connect(
 			ARDUINO_BLUETOOTH_MAC_ADDR,
 			function() {
-				// TODO SHOW SUCCESS MSG WITH NAME?
-				console.log("CONNECT SUCCESS");
+				newMsg("sucess", "Connected to Arduino.");
 				bluetooth.subscribe();
 				bluetooth.check();
 				bluetooth.send('A|'+ new Date().getTime());
 			},
 			function() {
-				// TODO SHOW ERR MSG
-				console.log("FAIL TO CONNECT");
+				console.log("Error: fail to connect");
 				if(++bluetooth.fail2connect < 2)
 					Meteor.setTimeout(function() {
 						Session.set('bt', {connected: false, trying: false});
@@ -43,7 +41,7 @@ bluetooth.subscribe = function() {
 		console.log("New message from bluetooth: "+data);
 		newData(data);
 	}, function() {
-		console.log("ERROR DATA IN SUBCRIBE");
+		newMsg("error", "Error data from bluetooth");
 	});
 };
 
@@ -65,10 +63,10 @@ bluetooth.disconnect = function() {
 		Meteor.clearInterval(this.handleCheck);
 
 	bluetoothSerial.disconnect(function() {
-		console.log("disconnect succeed");
+		newMsg('success', 'Disconnected from Arduino.');
 		Session.set('bt', {connected: false, trying: false});
 	}, function() {
-		console.log("disconnect failed")
+		newMsg('error', 'Error: disconnection failed.')
 	});
 };
 
@@ -77,6 +75,6 @@ bluetooth.send = function(data) {
 	bluetoothSerial.write(data+'\n', function() {
 		console.log("BT write OK");
 	}, function() {
-		console.error("BT write error");
+		newMsg("error", "BT write error");
 	});
 };

@@ -15,4 +15,11 @@
 		<a href="/register#1" alt="">Register</a>
 		<a href="/" class="passwordRecovery" alt="">I lost my password</a>
 	</div>
+	{{#if fingerprint}}
+	<div class="center">
+		<div class="ui horizontal divider">or</div>
+		<h4>Login with your fingerprint</h4>
+		<a id="fingerprint" href=""><img style="width: 4rem;" src="/fingerprint.png"></a>
+	</div>
+	{{/if}}
 </template>

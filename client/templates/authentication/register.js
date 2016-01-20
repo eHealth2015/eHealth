@@ -25,8 +25,7 @@ Template.register.events({
 					profile: newuser
 				}, function(error) {
 					if (error) {
-						// TODO SHOW ERROR
-						console.error(error);
+						newMsg("error", error.message);
 					} else {
 						EncryptionUtils.onSignIn(password1);
 						updateLocationHash(3);
@@ -34,8 +33,7 @@ Template.register.events({
 				});
 			}
 			else {
-				// TODO ERROR DIFFERENT PASSSWORDS
-				console.log("PASSWORDS ARE DIFFERENT");
+				newMsg("error", "Error: passwords are differents");
 			}
 		}
 		else {
