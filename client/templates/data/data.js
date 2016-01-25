@@ -1,6 +1,17 @@
 var dataLoaded = [];
+var realTimeData = false;
+var intervalId = [];
+var generateChartFirstTime = true;
+var dataToDisplay = [];
+
 Template.data.onRendered(function() {
 	setActive("data");
+});
+
+Template.data.onDestroyed(function() {
+	console.log("nnoooooooonnnn");
+	bluetooth.send('D');
+	stopIntervals();
 });
 
 Template.data.events({
@@ -12,17 +23,34 @@ Template.data.events({
 	},
 	'click #realTimeData': function(event) {
 		bluetooth.send('B');
+		realTimeData = true;
+		$(event.currentTarget).hide();
+		$("#stop").show();
+
+		if (isUserPatient()) {
+			var lastSequence = Datas.find({}, {sort: {tEnd: -1}, limit: 1}).fetch().pop();
+			if (lastSequence) {
+				var lastSequenceId = lastSequence._id;
+				Router.go('/data/' + Meteor.userId() + '/' + lastSequenceId);
+			}
+		}
+
 	},
 	'click #SD': function(event) {
 		bluetooth.send('C');
 	},
 	'click #stop': function(event) {
+		realTimeData = false;
 		bluetooth.send('D');
+		$(event.currentTarget).hide();
+		$("#realTimeData").show();
+		stopIntervals();
 	},
 	'click .sensor': function(event) {
 		var hash = event.currentTarget.getAttribute("href");
 		var id = parseInt(hash.replace("#", ""));
-		generateChart("#chart-container", dataLoaded[id]);
+		dataToDisplay = dataLoaded[id];
+		generateChart("#chart-container", dataToDisplay);
 	}
 })
 
@@ -64,7 +92,7 @@ Template.data.helpers({
 				return {
 					links: links,
 					active: firstName+" "+lastName
-				}
+				};
 			else {
 				var data = Datas.findOne({_id: dataId});
 				if(data) {
@@ -100,18 +128,15 @@ Template.data.helpers({
 			}
 		} else if (isUserPatient()) {
 			if (!patientId && !sequenceId) {
-				var events = {
-					load: function() {
-						var series = this.series[0];
-						setInterval(function() {
-							// TODO
-						}, 1000);
-					}
-				};
+
 			} else if (!sequenceId)
 				return getMySequences();
 			else {
 				dataLoaded = getSequence(sequenceId);
+				if (generateChartFirstTime && realTimeData) {
+					dataToDisplay = dataLoaded[0];
+					generateChart("#chart-container", dataToDisplay);
+				}
 				return dataLoaded;
 			}
 		}
@@ -289,31 +314,76 @@ function generateTableForSequence(sequenceId) {
 	};
 }
 
-function generateChart(id, object, eventParam) {
-	var events = (eventParam) ? eventParam : null;
+function generateChart(id, object) {
+	generateChartFirstTime = false;
+	stopIntervals();
+
+	var displayedData = (object.data > 1000 && realTimeData) ? lodash.sortBy(object.data, "x").slice(object.data.length - 1000 + 1, object.data.length) : lodash.sortBy(object.data, "x");
+
+	var eventParams = (realTimeData) ? {
+		load: function() {
+			var series = this.series[0];
+			var data;
+			var lastX;
+
+			intervalId[0] = setInterval(function() {
+				if (series) {
+					data = series.data;
+					if (data) {
+						lastX = data[data.length - 1].x;
+
+						var sequenceId = Router.current().params.sequenceId;
+						if (sequenceId) {
+							dataLoaded = getSequence(sequenceId);
+							for (var i in dataLoaded) {
+								if (dataLoaded[i].name == object.name) {
+									dataToDisplay = dataLoaded[i];
+									break;
+								}
+							}
+
+							var points = lodash.filter(dataToDisplay.data, function(e) {
+								return e.x > lastX;
+							});
+
+							var sortedPoints = lodash.sortBy(points, "x");
+
+							intervalId[1] = setInterval(function() {
+								if (!lodash.isEmpty(sortedPoints)) {
+									if (dataToDisplay.data.length > 1000)
+										series.removePoint(0, false, false);
+									series.addPoint(sortedPoints.shift(), false, false);
+								}
+							}, 5000 / (sortedPoints.length));
+						}
+					}
+				}
+			}, 5000);
+		}
+	} : null;
 
 	$(id).highcharts('StockChart', {
 		chart: {
 			backgroundColor: "#eee",
-			plotBackgroundColor: "#f5f5f5"
+			plotBackgroundColor: "#f5f5f5",
+			events: eventParams
 		},
 		rangeSelector: {
 			enabled: true,
 			buttons: [{
-				type: 'millisecond',
-				count: 100,
-				text: '0.1s'
+				type: 'second',
+				count: 10,
+				text: '10s'
 			}, {
 				type: 'second',
-				count: 1,
-				text: '1s'
+				count: 30,
+				text: '30s'
 			}, {
 				type: 'all',
 				text: 'All'
 			}],
 			selected: 0
 		},
-		events: events,
 		title: {
 			text: object.name
 		},
@@ -340,9 +410,17 @@ function generateChart(id, object, eventParam) {
 		series: [{
 			name: 'Random data',
 			turboThreshold: 5000,
-			data: object.data
+			type: 'spline',
+			data: displayedData
 		}]
 	});
 
 	$("text:contains('Highcharts.com')").remove();
+}
+
+function stopIntervals() {
+	for (var i in intervalId) {
+		console.log("clear");
+		clearInterval(intervalId[i]);
+	}
 }
