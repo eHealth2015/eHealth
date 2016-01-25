@@ -1,21 +1,26 @@
 Accounts.onCreateUser(function(options, user) {
 
 	// CHECK CODE
-
-	// if(options && options.code != "") {
-	// 	var code = Codes.findOne({_id: options.code});
+	var type;
+	if(options && options.code != "") {
+		var code = Codes.findOne({_id: options.code});
 		
-	// 	if(!code || !options.profile.type === code.type)
-	// 		throw new Meteor.Error("newuser-deny", "Wrong code");
-
-	// 	// TODO
-	// 	// 
-
-	// }
+		if(!code || !options.profile.type === code.type)
+			throw new Meteor.Error("newuser-deny", "Wrong code");
+		else {
+			type = code.type;
+			Codes.update({_id: code._id}, {
+				$set: {
+					// TODO: put the new userID
+					acceptDate: new Date()
+				}
+			});
+		}
+	}
 
 	if (options.profile) {
     	user.profile = options.profile;
-		if(user.profile.type === "Medic") {
+		if(type === "Medic") {
 			user.patients = [];
 		}
 		else

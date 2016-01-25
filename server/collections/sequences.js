@@ -6,14 +6,24 @@ Meteor.publish('sequences', function() {
 		var thisUser =  Meteor.users.findOne({_id: this.userId});
 		if(thisUser.profile.type === "Patient")
 			return Sequences.find({userId: this.userId});
-		else
+		else {
+			var ids = thisUser.patients.map(function(e) {
+						return e._id;
+			});
+			var groupsCursor = getGroupsByUserId(this.userId);
+			if(groupsCursor) {
+				var groups = groupsCursor.fetch();
+				if(groups && groups.length > 0)
+					for(var i = 0, group = groups[0]; i < groups.length; i++, group = groups[i])
+						for(var j = 0; j < group.patients.length; j++)
+							ids.push(group.patients[j]._id);
+			}
 			return Sequences.find({
 				userId: {
-					$in: thisUser.patients.map(function(e) {
-						return e._id;
-					})
+					$in: ids
 				}
 			});
+		}
 	}
 	else
 		this.ready();

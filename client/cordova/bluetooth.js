@@ -14,7 +14,7 @@ bluetooth.try2connect = function() {
 		bluetoothSerial.connect(
 			ARDUINO_BLUETOOTH_MAC_ADDR,
 			function() {
-				newMsg("sucess", "Connected to Arduino.");
+				newMsg("success", "Connected to Arduino.");
 				bluetooth.subscribe();
 				bluetooth.check();
 				bluetooth.send('A|'+ new Date().getTime());

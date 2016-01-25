@@ -167,7 +167,13 @@ Template.data.helpers({
 // MEDIC PART
 function getPatientsForMedic() {
 	if(isUserMedic()) {
-		return Meteor.user().patients.map(function(patient) {
+		var ids = Meteor.user().patients;
+		var groups = Groups.find().fetch();
+		for(i = 0; i < groups.length; i++)
+			for(var j = 0; j < groups[i].patients.length; j++)
+				ids.push(groups[i].patients[j]._id);
+		
+		return ids.map(function(patient) {
 			var user = Meteor.users.findOne({_id: patient._id});
 			if(user) {
 				patient.firstName = user.profile.firstName;
@@ -326,7 +332,7 @@ function generateChart(id, object) {
 			var data;
 			var lastX;
 
-			intervalId[0] = setInterval(function() {
+			intervalId[0] = Meteor.setInterval(function() {
 				if (series) {
 					data = series.data;
 					if (data) {
@@ -348,7 +354,7 @@ function generateChart(id, object) {
 
 							var sortedPoints = lodash.sortBy(points, "x");
 
-							intervalId[1] = setInterval(function() {
+							intervalId[1] = Meteor.setInterval(function() {
 								if (!lodash.isEmpty(sortedPoints)) {
 									if (dataToDisplay.data.length > 1000)
 										series.removePoint(0, false, false);

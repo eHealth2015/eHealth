@@ -43,7 +43,7 @@ Template.clientMsg.helpers({
 			case "error":
 				return "negative";
 			case "success":
-				return "sucess";
+				return "positive";
 			default:
 				return "";
 		}
