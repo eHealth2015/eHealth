@@ -9,7 +9,6 @@ AppRouter = RouteController.extend({
 		this.subscribe('principals');
 		this.subscribe('groups');
 		this.subscribe('messages');
-		// etc
 	},
 	waitOn: function() {
 		return [
@@ -40,7 +39,7 @@ AppRouter = RouteController.extend({
 Router.route('/', {
 	controller: 'AuthRouter',
 	action: function () {
-		this.redirect('/home');
+		this.redirect('/data');
 	}
 });
 
@@ -63,9 +62,6 @@ Router.route('/passwordRecovery/:token?', {
 	}
 });
 
-Router.route('/home', {
-	controller: 'AppRouter'
-});
 Router.route('/data/:patientId?/:sequenceId?', {
 	template: 'data',
 	controller: 'AppRouter',
