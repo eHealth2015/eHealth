@@ -36,7 +36,7 @@ SequencesEncryption = new CollectionEncryption(
 				console.log("medics:")
 				console.log(medics);
 				for(var i = 0; i < medics.length; i++)
-					futurSubscribe(docId, medics[i]);
+					futurSubscribe(doc._id, medics[i]);
 			}
 		}
 	}
