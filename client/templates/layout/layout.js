@@ -13,7 +13,7 @@ Template.layout.events({
 
 Template.layout.helpers({
 	nbMessages: function() {
-		return Messages.find().count();
+		return Messages.find({receiver: Meteor.userId(), read: false}).count();
 	},
 	whoIsActive: function() {
 		return Session.get('whoIsActive');
@@ -38,11 +38,7 @@ Template.layout.onRendered(function () {
 		onApprove: function() {
 			var message = $("#message")[0].value;
 			var receiverId = Router.current().getParams().hash;
-			Messages.insert({
-				sender: Meteor.userId(),
-				receiver: receiverId,
-				message: message
-			});
+			sendMessageTo(message, receiverId);
 			window.location.hash = "";
 			return true;
 		},

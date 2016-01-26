@@ -81,7 +81,8 @@ Router.route('/groups/:_id?', {
 	template: 'groups',
 	controller: 'AppRouter'
 });
-Router.route('messages', {
+Router.route('messages/:_id?', {
+	template: 'messages',
 	controller: 'AppRouter'
 });
 Router.route('settings', {

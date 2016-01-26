@@ -5,7 +5,8 @@ Template.register.events({
 		if(newuser && newuser.type) {
 			newuser.firstName = template.find('#firstName').value;
 			newuser.lastName = template.find('#lastName').value;
-			email = template.find('#email').value;
+			var email = template.find('#email').value;
+			newuser.code = template.find('#code').value;
 
 			var password1 = template.find('#password1').value;
 			var password2 = template.find('#password2').value;

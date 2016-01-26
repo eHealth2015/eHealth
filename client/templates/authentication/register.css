@@ -1,3 +1,10 @@
 div.attached.segment {
 	background: rgb(235, 235, 235);
 }
+
+#code {
+    float: left;
+    position: absolute;
+    width: 32.2%;
+    margin-top: 12px;
+}

@@ -55,6 +55,9 @@ Template.data.events({
 })
 
 Template.data.helpers({
+	btTrying: function() {
+		return Session.get('bt').trying ? "loading" : "";
+	},
 	btConnection: function() {
 		if(!Session.get('bt').connected)
 			return {

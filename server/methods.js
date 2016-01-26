@@ -113,7 +113,7 @@ Meteor.methods({
 
 	'invite': function(emailAddr, type) {
 		// CHECK IF AUTHORISED
-		var code = Code.insert({
+		var code = Codes.insert({
 			createDate: new Date(),
 			userIdFrom: this.userId,
 			userIdTo: null,

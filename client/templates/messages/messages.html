@@ -1,12 +1,86 @@
 <template name="messages">
-	<h1>Messages template</h1>
-	{{#each messages}}
-		{{> message}}
-	{{/each}}
+	<h1>Encrypted messaging</h1>
+
+	{{#unless view}}
+	{{#if people}}
+	<div class="big-spacing"></div>
+	<table class="ui very basic collapsing celled table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Messages</th>
+				<th>Last message</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#each people}}
+			<tr>
+				<td>
+					<h4 class="ui image header">
+						<div class="content">
+							{{firstName}} {{lastName}}
+							<div class="sub header">{{title}}</div>
+						</div>
+					</h4>
+				</td>
+				<td>
+					{{number}}
+				</td>
+				<td>
+					{{lastMessage}}
+				</td>
+				<td>
+				<a href="/messages/{{id}}" class="small blue ui button">View</a>
+				</td>
+			</tr>
+			{{/each}}
+		</tbody>
+	</table>
+	{{else}}
+	<div class="big-spacing"></div>
+	<div class="italic">
+			<i class="warning circle icon"></i>
+			<span>You don't have any message</span>
+		</div>
+	{{/if}}
+
+	{{else}}
+		<h2>with {{name.title}} {{name.firstName}} {{name.lastName}}</h2>
+		<div class="big-spacing"></div>
+		<form class="ui form">
+			<div class="field">
+				<label></label>
+				<input type="text" placeholder="New message..."  id="newMessage">
+			</div>
+		</form>
+		<div class="big-spacing"></div>
+		<div class="ui right aligned grid">
+		{{#each messages}}
+			{{> message}}
+		{{/each}}
+		</div>
+	{{/unless}}
 </template>
 
 <template name="message">
-	{{#with messageObj}}
-	<p>From: {{senderFirstName}} {{senderLastName}} | text: {{message}}</p><br>
-	{{/with}}
+	{{#if message.selfSender}}
+	<div class="row">
+		<div class="left floated left aligned six wide column">
+			<div style="margin-bottom: 0px;" class="ui {{message.new}} teal message"><p>{{message.text}}</p></div>
+			<h5 style="margin-top: 0px;" class="ui header">
+				<div class="sub header">{{message.date}}</div>
+			</h5>
+		</div>
+	</div>
+	{{else}}
+	<div class="row">
+		<div class="right floated left aligned six wide column">
+			<div style="margin-bottom: 0px;" class="ui {{message.new}} message"><p>{{message.text}}</p></div>
+			<h5 style="margin-top: 0px;" class="ui header">
+				<div class="sub header">{{message.date}}</div>
+			</h5>
+		</div>
+	</div>
+	{{/if}}
 </template>
