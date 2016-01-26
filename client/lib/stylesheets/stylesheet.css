@@ -12,6 +12,10 @@ html, body {
 	color: #444;
 }
 
+body.pushable.dimmable.undetached {
+	background: #eee !important;
+}
+
 body.pushable > .pusher {
 	background: #eee !important;
 }
