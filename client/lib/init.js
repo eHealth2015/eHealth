@@ -5,8 +5,7 @@ Accounts.onResetPasswordLink(function(token) {
 Session.setDefault('state', 'locked');
 
 Session.setDefault('whoIsActive', {
-	'home': "active",
-	'data': "",
+	'data': "active",
 	'groups': "",
 	'messages': "",
 	'settings': "",
@@ -15,7 +14,6 @@ Session.setDefault('whoIsActive', {
 
 setActive = function(name) {
 	var obj = {
-		'home': "",
 		'data': "",
 		'groups': "",
 		'messages': "",

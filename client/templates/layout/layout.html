@@ -1,11 +1,6 @@
 <template name="layout">
 	{{#if currentUser}}
 	<div class="ui inverted labeled icon left inline vertical sidebar menu">
-		<a class="item {{whoIsActive.home}}" alt="Home" href="/home">
-			<i class="home icon"></i>
-			Home
-		</a>
-
 		<a class="item {{whoIsActive.data}}" href="/data" alt="Data">
 			<i class="area chart icon"></i>
 			Data
@@ -38,11 +33,6 @@
 		<a class="item logout" href="/login" alt="Logout">
 			<i class="sign out icon"></i>
 			Logout
-		</a>		
-		<!-- DEV -->
-		<a style="bottom: 0px; position: absolute; left: 8%;" class="item {{whoIsActive.dev}}" href="/dev" alt="Dev">
-			<i class="codepen icon"></i>
-			Developer
 		</a>
 	</div>
 
