@@ -26,7 +26,7 @@ Template.login.events({
 						newMsg("error", error.message);
 					} else {
 						EncryptionUtils.onSignIn(password);
-						Router.go('/home');
+						Router.go('/data');
 					}
 				}
 			});
@@ -47,7 +47,7 @@ Template.login.events({
 					window.localStorage.setItem("email", email);
 					window.localStorage.setItem("password", Accounts._hashPassword(password).digest);
 					window.localStorage.setItem("fingerprintAvailable", "true");
-					Router.go('/home');
+					Router.go('/data');
 				}
 			});
 		}

@@ -11,7 +11,7 @@ Template.passwordRecovery.events({
 					if (error) {
 						newMsg("error", error.message);
 					} else {
-						Router.go('/home');
+						Router.go('/data');
 						newMsg("sucess", "Password changed");
 					}
 				});
