@@ -44,6 +44,8 @@ Template.clientMsg.helpers({
 				return "negative";
 			case "success":
 				return "positive";
+			case "warning":
+				return "warning";
 			default:
 				return "";
 		}

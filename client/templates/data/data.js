@@ -3,6 +3,7 @@ var realTimeData = false;
 var intervalId = [];
 var generateChartFirstTime = true;
 var dataToDisplay = [];
+var nbAlerts = null;
 
 Template.data.onRendered(function() {
 	setActive("data");
@@ -219,6 +220,14 @@ function getSequence(sequenceId) {
 	var sequence = Datas.findOne({_id: sequenceId});
 	var sensors = [];
 	if (sequence) {
+		var alerts = sequence.alerts.length;
+		if(nbAlerts && alerts > nbAlerts) {
+			var lastElement = sequence.alerts[alerts-1];
+			newMsg("warning", "Alert: "+lastElement[0]+" with value "+lastElement[1]+"(seqId "+sequence.seqId+")");
+		}
+		
+		nbAlerts = alerts;
+
 		var data = sequence.data;
 		var id = 0;
 		for (var key in data) {
