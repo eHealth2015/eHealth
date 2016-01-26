@@ -37,9 +37,12 @@ AppRouter = RouteController.extend({
 });
 
 Router.route('/', {
-	controller: 'AuthRouter',
+	controller: 'AppRouter',
 	action: function () {
-		this.redirect('/data');
+		if(Meteor.userId())
+			this.redirect('/data');
+		else
+			this.redirect('/login');
 	}
 });
 
@@ -66,11 +69,15 @@ Router.route('/data/:patientId?/:sequenceId?', {
 	template: 'data',
 	controller: 'AppRouter',
 	onBeforeAction: function() {
-		if (isUserPatient() && this.params.patientId != Meteor.userId()) {
-			this.redirect("/data/" + Meteor.userId());
-		} else {
-			this.render();
+		if(Meteor.userId()) {
+			if (isUserPatient() && this.params.patientId != Meteor.userId()) {
+				this.redirect("/data/" + Meteor.userId());
+			} else {
+				this.render();
+			}
 		}
+		else
+			this.redirect("/login");
 	}
 });
 Router.route('/groups/:_id?', {

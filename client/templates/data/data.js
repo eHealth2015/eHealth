@@ -9,7 +9,9 @@ Template.data.onRendered(function() {
 });
 
 Template.data.onDestroyed(function() {
-	bluetooth.send('D');
+	if(Meteor.isCordova) {
+		bluetooth.send('D');
+	}
 	stopIntervals();
 });
 
@@ -21,34 +23,39 @@ Template.data.events({
 			bluetooth.try2connect();
 	},
 	'click #realTimeData': function(event) {
-		bluetooth.send('B');
-		realTimeData = true;
-		$(event.currentTarget).hide();
-		$("#stop").show();
+		if(Meteor.isCordova) {
+			bluetooth.send('B');
+			realTimeData = true;
+			$(event.currentTarget).hide();
+			$("#stop").show();
 
-		if (isUserPatient()) {
-			var lastSequence = Datas.find({}, {sort: {tEnd: -1}, limit: 1}).fetch().pop();
-			if (lastSequence) {
-				var lastSequenceId = lastSequence._id;
-				Router.go('/data/' + Meteor.userId() + '/' + lastSequenceId);
-				intervalId.push(Meteor.setInterval(function() {
-					dataLoaded = getSequence(lastSequenceId);
-					var hashId = Session.get('hashId');
-					console.log(hashId);
-					var id = hashId ? hashId : 0;
-					dataToDisplay = dataLoaded[id];
-					generateChart("#chart-container", dataToDisplay);
-				}, 500));
+			if (isUserPatient()) {
+				var lastSequence = Datas.find({}, {sort: {tEnd: -1}, limit: 1}).fetch().pop();
+				if (lastSequence) {
+					var lastSequenceId = lastSequence._id;
+					Router.go('/data/' + Meteor.userId() + '/' + lastSequenceId);
+					intervalId.push(Meteor.setInterval(function() {
+						dataLoaded = getSequence(lastSequenceId);
+						var hashId = Session.get('hashId');
+						console.log(hashId);
+						var id = hashId ? hashId : 0;
+						dataToDisplay = dataLoaded[id];
+						generateChart("#chart-container", dataToDisplay);
+					}, 500));
+				}
 			}
 		}
-
 	},
 	'click #SD': function(event) {
-		bluetooth.send('C');
+		if(Meteor.isCordova) {
+			bluetooth.send('C');
+		}
 	},
 	'click #stop': function(event) {
 		realTimeData = false;
-		bluetooth.send('D');
+		if(Meteor.isCordova) {
+			bluetooth.send('D');
+		}
 		$(event.currentTarget).hide();
 		$("#realTimeData").show();
 		stopIntervals();
