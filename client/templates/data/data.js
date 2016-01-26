@@ -223,7 +223,7 @@ function getSequence(sequenceId) {
 		var alerts = sequence.alerts.length;
 		if(nbAlerts && alerts > nbAlerts) {
 			var lastElement = sequence.alerts[alerts-1];
-			newMsg("warning", "Alert: "+lastElement[0]+" with value "+lastElement[1]+"(seqId "+sequence.seqId+")");
+			newMsg("warning", "Alert: "+lastElement[1]+" (seqId "+sequence.seqId+")");
 		}
 		
 		nbAlerts = alerts;
