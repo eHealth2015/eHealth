@@ -9,7 +9,6 @@ Template.data.onRendered(function() {
 });
 
 Template.data.onDestroyed(function() {
-	console.log("nnoooooooonnnn");
 	bluetooth.send('D');
 	stopIntervals();
 });
@@ -32,6 +31,14 @@ Template.data.events({
 			if (lastSequence) {
 				var lastSequenceId = lastSequence._id;
 				Router.go('/data/' + Meteor.userId() + '/' + lastSequenceId);
+				intervalId.push(Meteor.setInterval(function() {
+					dataLoaded = getSequence(lastSequenceId);
+					var hashId = Session.get('hashId');
+					console.log(hashId);
+					var id = hashId ? hashId : 0;
+					dataToDisplay = dataLoaded[id];
+					generateChart("#chart-container", dataToDisplay);
+				}, 500));
 			}
 		}
 
@@ -49,6 +56,7 @@ Template.data.events({
 	'click .sensor': function(event) {
 		var hash = event.currentTarget.getAttribute("href");
 		var id = parseInt(hash.replace("#", ""));
+		Session.set('hashId', id);
 		dataToDisplay = dataLoaded[id];
 		generateChart("#chart-container", dataToDisplay);
 	}
@@ -325,57 +333,16 @@ function generateTableForSequence(sequenceId) {
 
 function generateChart(id, object) {
 	generateChartFirstTime = false;
-	stopIntervals();
-
-	var displayedData = (object.data > 1000 && realTimeData) ? lodash.sortBy(object.data, "x").slice(object.data.length - 1000 + 1, object.data.length) : lodash.sortBy(object.data, "x");
-
-	var eventParams = (realTimeData) ? {
-		load: function() {
-			var series = this.series[0];
-			var data;
-			var lastX;
-
-			intervalId[0] = Meteor.setInterval(function() {
-				if (series) {
-					data = series.data;
-					if (data) {
-						lastX = data[data.length - 1].x;
-
-						var sequenceId = Router.current().params.sequenceId;
-						if (sequenceId) {
-							dataLoaded = getSequence(sequenceId);
-							for (var i in dataLoaded) {
-								if (dataLoaded[i].name == object.name) {
-									dataToDisplay = dataLoaded[i];
-									break;
-								}
-							}
-
-							var points = lodash.filter(dataToDisplay.data, function(e) {
-								return e.x > lastX;
-							});
-
-							var sortedPoints = lodash.sortBy(points, "x");
-
-							intervalId[1] = Meteor.setInterval(function() {
-								if (!lodash.isEmpty(sortedPoints)) {
-									if (dataToDisplay.data.length > 1000)
-										series.removePoint(0, false, false);
-									series.addPoint(sortedPoints.shift(), false, false);
-								}
-							}, 5000 / (sortedPoints.length));
-						}
-					}
-				}
-			}, 5000);
-		}
-	} : null;
 
 	$(id).highcharts('StockChart', {
 		chart: {
 			backgroundColor: "#eee",
-			plotBackgroundColor: "#f5f5f5",
-			events: eventParams
+			plotBackgroundColor: "#f5f5f5"
+		},
+		plotOptions: {
+			series: {
+				animation: !realTimeData
+			}
 		},
 		rangeSelector: {
 			enabled: true,
@@ -420,7 +387,7 @@ function generateChart(id, object) {
 			name: 'Random data',
 			turboThreshold: 5000,
 			type: 'spline',
-			data: displayedData
+			data: object.data
 		}]
 	});
 
@@ -429,7 +396,6 @@ function generateChart(id, object) {
 
 function stopIntervals() {
 	for (var i in intervalId) {
-		console.log("clear");
-		clearInterval(intervalId[i]);
+		Meteor.clearInterval(intervalId[i]);
 	}
 }
