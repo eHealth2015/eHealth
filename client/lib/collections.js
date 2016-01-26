@@ -36,15 +36,15 @@ SequencesEncryption = new CollectionEncryption(
 				console.log("medics:")
 				console.log(medics);
 				for(var i = 0; i < medics.length; i++)
-					futurSubscribe(medics[i]);
+					futurSubscribe(docId, medics[i]);
 			}
 		}
 	}
 );
 
-function futurSubscribe(medicId) {
+function futurSubscribe(docId, medicId) {
 	Meteor.subscribe('principals', medicId, function () {
-		SequencesEncryption.shareDocWithUser(doc._id, medicId);
+		SequencesEncryption.shareDocWithUser(docId, medicId);
 	});
 }
 

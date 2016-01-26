@@ -16,12 +16,10 @@ Template.login.events({
 		var password = window.localStorage.getItem("password");
 
 		fingerprint.check(function() {
-			Accounts.callLoginMethod({
-				methodArguments: [{
-					user: {email: email},
-					password: {digest: password, algorithm: "sha-256"}
-				}],
-				userCallback: function(error) {
+			Meteor.loginWithPassword(
+				email,
+				password,
+				function(error) {
 					if (error) {
 						newMsg("error", error.message);
 					} else {
@@ -29,7 +27,7 @@ Template.login.events({
 						Router.go('/data');
 					}
 				}
-			});
+			);
 		}, function() {
 			newMsg("error", "Fail to login with fingerprint");
 		});
@@ -45,7 +43,7 @@ Template.login.events({
 				} else {
 					EncryptionUtils.onSignIn(password);
 					window.localStorage.setItem("email", email);
-					window.localStorage.setItem("password", Accounts._hashPassword(password).digest);
+					window.localStorage.setItem("password", password);
 					window.localStorage.setItem("fingerprintAvailable", "true");
 					Router.go('/data');
 				}
